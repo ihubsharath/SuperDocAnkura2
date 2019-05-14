@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_delay"
+        android:icon="@drawable/ic_delay"
+        android:title="Delay" />
+
+    <item
+        android:id="@+id/navigation_stop"
+        android:icon="@drawable/ic_start"
+        android:title="Stop" />
+
+    <item
+        android:id="@+id/navigation_add"
+        android:icon="@drawable/ic_add"
+        android:title="Add" />
+</menu>
