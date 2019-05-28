@@ -1,81 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:orientation="horizontal"
-        android:background="@drawable/top">
+        android:background="@drawable/top"
+        android:orientation="horizontal">
+
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="0.25"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
+            android:layout_weight="0.25"
             android:gravity="center">
+
             <android.support.v7.widget.CardView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 app:cardCornerRadius="40dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
+
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_man_24dp"/>
+                        android:src="@drawable/doc_profile" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textColor="#ffffff"
-                android:text="Dr.Vivek"
-                android:drawableRight="@drawable/ic_edit_white_24dp"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#ffffff"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#ffffff"
-                android:textSize="12sp"
-                android:text="MBBS, DGO, DNB" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#ffffff"
-                android:textSize="12sp"
-                android:text="Obstetrics and Gynecology" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_edit_white_24dp"
+                android:text="Dr.Vivek"
+                android:textColor="#ffffff"
+                android:textSize="20sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#ffffff" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="MBBS, DGO, DNB"
+                android:textColor="#ffffff"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Obstetrics and Gynecology"
+                android:textColor="#ffffff"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="0.25"
             android:gravity="center"
-            android:paddingBottom="50dp"
-            android:layout_height="match_parent">
+            android:paddingBottom="50dp">
+
             <ImageView
-                android:src="@drawable/ic_notifications_white_24dp"
                 android:layout_width="30dp"
-                android:layout_height="30dp" />
+                android:layout_height="30dp"
+                android:src="@drawable/ic_notifications_white_24dp" />
         </LinearLayout>
     </LinearLayout>
-    <TextView
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="right">
+
+        <ImageView
+            android:id="@+id/imageMarkLeave"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/markleave" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textSize="25sp"
-        android:gravity="center"
-        android:text="CALENDAR  FRAGMENT"/>
+        android:orientation="vertical">
+
+        <com.applandeo.materialcalendarview.CalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            app:forwardButtonSrc="@drawable/rightarrow"
+            app:headerColor="#ffffff"
+            app:headerLabelColor="#000000"
+            app:previousButtonSrc="@drawable/ic_keyboard_arrow_left_black_24dp" />
+
+    </LinearLayout>
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="3"-->
+        <!--android:orientation="vertical">-->
+
+    <!--</LinearLayout>-->
 </LinearLayout>

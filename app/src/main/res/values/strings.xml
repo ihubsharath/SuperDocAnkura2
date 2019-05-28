@@ -5,7 +5,39 @@
     <string name="title_contacts">Contacts</string>
     <string name="loading_text">loading</string>
     <string name="title_profile">Profile</string>
-
+    <string name="required_field">This Field Required</string>
     <string name="checkout">CHECK \n OUT</string>
+    <string name="markfollowup">MARK \n FOLLOWUP</string>
     <string name="endatusualtime">End at \n usual time</string>
+
+    <!--___________________________________________________________________-->
+    <!--MATERIAL-CALENDAR-VIEW-->
+    <string name="material_calendar_monday">Mon</string>
+    <string name="material_calendar_tuesday">Tue</string>
+    <string name="material_calendar_wednesday">Wed</string>
+    <string name="material_calendar_thursday">Thu</string>
+    <string name="material_calendar_friday">Fri</string>
+    <string name="material_calendar_saturday">Sat</string>
+    <string name="material_calendar_sunday">Sun</string>
+
+    <array name="material_calendar_months_array">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </array>
+
+    <string name="material_calendar_today_button">Today</string>
+    <string name="material_calendar_positive_button">OK</string>
+    <string name="material_calendar_negative_button">Cancel</string>
+
+    <!--___________________________________________________________________-->
 </resources>

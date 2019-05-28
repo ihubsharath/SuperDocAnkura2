@@ -8,8 +8,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceGenaretor {
 
-//    public static final String API_BASE_URL = "http://183.82.109.67:8080/doctor_appointments/rest/doctorConsultation/";
-public static final String API_BASE_URL = "http://192.168.1.100:8080/AnkuraHospitals/rest/doctorConsultation/";
+    public static final String API_BASE_URL = "http://183.82.109.67:8080/AnkuraHospitals/rest/doctorConsultation/";
+//public static final String API_BASE_URL = "http://192.168.1.100:8080/AnkuraHospitals/rest/doctorConsultation/";
     public static OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)

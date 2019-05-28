@@ -27,4 +27,8 @@
         <item>#00BCD4</item>
         <item>#00BCD4</item>
     </array>
+    <array name="colors">
+        <item>#317BA9</item>
+        <item>#14BBD3</item>
+    </array>
 </resources>

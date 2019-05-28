@@ -16,8 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.superdoc_ankura.R;
+import com.example.superdoc_ankura.utils.BaseActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     PreferenceManager preferenceManager;
     LinearLayout Layout_bars;
@@ -46,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
         preferenceManager = new PreferenceManager(this);
         vp.addOnPageChangeListener(viewPagerPageChangeListener);
         if (!preferenceManager.FirstLaunch()) {
-//            launchMain();
-//            finish();
+            launchMain();
+            finish();
         }
         ColoredBars(0);
         Next.setOnClickListener(new View.OnClickListener() {
@@ -124,8 +125,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void launchMain() {
         preferenceManager.setFirstTimeLaunch(false);
-        startActivity(new Intent(MainActivity.this, LoginActivity.class));
-        finish();
+        if (sessionManager.getDOCTORID()==null){
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
+        }else {
+            Intent i = new Intent(MainActivity.this, HomeActivity.class);
+            startActivity(i);
+            finish();
+        }
+
     }
 
     ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {

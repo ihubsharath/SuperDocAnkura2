@@ -18,7 +18,7 @@ public class AllAppointmentsHolder extends RecyclerView.ViewHolder {
 
 
     public SwipeLayout swipeLayout, swipeLayout2;
-    public TextView checkout;
+    public TextView checkout, markFollowUp;
     public TextView tvTime,tvPatientName,tvApptStatus,tvTime2,tvPatientName2,tvApptStatus2;
     public LinearLayout left_to_right_undo,right_to_left, left;;
     public TextView cancel,noshow;
@@ -59,6 +59,7 @@ public LinearLayout startConsult;
 //        ivUndoImage  = itemView.findViewById(R.id.ivUndoImage);
         undo = itemView.findViewById(R.id.undo);
         checkout = itemView.findViewById(R.id.checkout);
+        markFollowUp = itemView.findViewById(R.id.markFollowUp);
 
         layout_timer = itemView.findViewById(R.id.layout_timer);
         chronometer = itemView.findViewById(R.id.chronometer);

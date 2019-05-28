@@ -19,6 +19,7 @@ import com.example.superdoc_ankura.pojos.response.ConfirmedAppointmentsResponse;
 import com.example.superdoc_ankura.pojos.response.DoctorSessionResponse;
 import com.example.superdoc_ankura.pojos.response.GetListOfCancelledAppointmentsResponse;
 import com.example.superdoc_ankura.pojos.response.GetListOfNoShowAppointmentsResponse;
+import com.example.superdoc_ankura.pojos.response.ListOfTotalCountsWithDatesResponse;
 import com.example.superdoc_ankura.pojos.response.LoginResponse;
 import com.example.superdoc_ankura.pojos.response.NoShowAppointmentsResponse;
 import com.example.superdoc_ankura.pojos.response.StartConsultantResponse;
@@ -33,6 +34,7 @@ import com.example.superdoc_ankura.pojos.response.StartConsultantResponse;
 //
 //import retrofit2.Call;
 //import retrofit2.http.Body;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -91,4 +93,7 @@ public interface ServiceCalls {
 
     @POST("doctorLogin")
     Call<LoginResponse> doLogin(@Body LoginRequest loginRequest);
+
+    @GET("listOfAppointmentsCountWithDatesV2")
+    Call<ArrayList<ListOfTotalCountsWithDatesResponse>> getListOfTotalCountsWithDates(@Query("doctorId") String doctorid);
 }

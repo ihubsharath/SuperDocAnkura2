@@ -1,22 +1,24 @@
 package com.example.superdoc_ankura.activities;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -30,13 +32,13 @@ import com.example.superdoc_ankura.adapters.AllAppointmentsAdapter;
 import com.example.superdoc_ankura.adapters.CancelledAppointmentsAdapter;
 import com.example.superdoc_ankura.adapters.ConfirmedAppointmentsAdapter;
 import com.example.superdoc_ankura.adapters.NoShowAppointmentsAdapter;
+import com.example.superdoc_ankura.fragments.GraphFragment;
 import com.example.superdoc_ankura.pojos.response.AllAppointmentsResponse;
 import com.example.superdoc_ankura.pojos.response.ConfirmedAppointmentsResponse;
 import com.example.superdoc_ankura.pojos.response.GetListOfCancelledAppointmentsResponse;
 import com.example.superdoc_ankura.pojos.response.GetListOfNoShowAppointmentsResponse;
 import com.example.superdoc_ankura.utils.BaseActivity;
 
-import java.sql.Time;
 import java.util.List;
 
 import retrofit2.Call;
@@ -44,7 +46,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AllAppointmentsActivity extends BaseActivity {
-    int hour2 ;
+    static AllAppointmentsActivity allAppointmentsActivity;
+    int hour2;
     private int hour3;
     LinearLayout llStart, llDelay, llAdd;
     TextView tvStart, tvDelay, tvAdd;
@@ -65,21 +68,26 @@ public class AllAppointmentsActivity extends BaseActivity {
 
     String AppointmentsCount, OrganizationName, SessionTime;
     int int_allAppointmentsSize, int_noshowAppointmentsSize, int_checkinAppointmentsSize, int_cancelAppointmentsSize;
-    public boolean start ;
+    public boolean start;
+    public boolean stop;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_appointments);
-
+        allAppointmentsActivity = this;
         layoutSession = findViewById(R.id.layout_session);
         noDataFound = findViewById(R.id.noDataFound);
+
         layoutSession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+
+                onBackPressed();
+
             }
+
         });
         llStart = findViewById(R.id.ll_start);
         llDelay = findViewById(R.id.ll_delay);
@@ -111,7 +119,7 @@ public class AllAppointmentsActivity extends BaseActivity {
                     View view = snackbar.getView();
                     TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
                     tv.setTextColor(ContextCompat.getColor(AllAppointmentsActivity.this, R.color.white));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     } else {
                         tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -124,8 +132,14 @@ public class AllAppointmentsActivity extends BaseActivity {
 
                     snackbar.show();
                 } else if (tvStart.getText().toString().equals("STOP")) {
-                    Intent i = new Intent(AllAppointmentsActivity.this,GraphActivity.class);
-                    startActivity(i);
+                    stop = true;
+                    finish();
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+//
+
+
+//                    Intent i = new Intent(AllAppointmentsActivity.this, GraphFragment.class);
+//                    startActivity(i);
                 }
             }
         });
@@ -138,17 +152,14 @@ public class AllAppointmentsActivity extends BaseActivity {
                 dialog = new Dialog(AllAppointmentsActivity.this, R.style.CustomDialogTheme);
                 dialog.setContentView(customView);
 
-//                dialog.getWindow().setGravity(Gravity.LEFT|Gravity.RIGHT);
-//                WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
-//                layoutParams.x = 100; // right margin
-//                layoutParams.y = 100; // top margin
-//                dialog.getWindow().setAttributes(layoutParams);
 
-
-
+dialog.getWindow().setLayout(((getWidth(AllAppointmentsActivity.this) / 100) * 90),((getHeight(AllAppointmentsActivity.this) / 100) * 80));
+                dialog.getWindow().setGravity(Gravity.CENTER);
                 dialog.show();
                 final TimePicker startTime = dialog.findViewById(R.id.start_time);
-                TimePicker endTime  =  dialog.findViewById(R.id.end_time);
+                TimePicker endTime = dialog.findViewById(R.id.end_time);
+
+
                 final TextView tv_start_time = dialog.findViewById(R.id.tv_start_time);
                 final TextView tv_end_time = dialog.findViewById(R.id.tv_end_time);
                 TextView tv_start = dialog.findViewById(R.id.tv_start);
@@ -157,25 +168,24 @@ public class AllAppointmentsActivity extends BaseActivity {
                 TextView tvMinuts = dialog.findViewById(R.id.tv_minuts);
                 EditText etMinuts = dialog.findViewById(R.id.et_minuts);
 
-                tvMinuts.setTypeface(faceMedium);
-                etMinuts.setTypeface(faceMedium);
+//                tvMinuts.setTypeface(faceMedium);
+//                etMinuts.setTypeface(faceMedium);
+//
+//                tv_markdelay.setTypeface(faceMedium);
+//
+//                tv_start_time.setTypeface(faceBold);
+//                tv_end_time.setTypeface(faceBold);
+//                tv_start.setTypeface(faceLight);
+//                tv_end.setTypeface(faceLight);
 
-                tv_markdelay.setTypeface(faceMedium);
 
-                tv_start_time.setTypeface(faceBold);
-                tv_end_time.setTypeface(faceBold);
-                tv_start.setTypeface(faceLight);
-                tv_end.setTypeface(faceLight);
-
-
-               // startTime.setIs24HourView(true);
+                // startTime.setIs24HourView(true);
                 int hour, minute;
                 String am_pm;
-                if (Build.VERSION.SDK_INT >= 23 ){
+                if (Build.VERSION.SDK_INT >= 23) {
                     hour = startTime.getHour();
                     minute = startTime.getMinute();
-                }
-                else{
+                } else {
                     hour = startTime.getCurrentHour();
                     minute = startTime.getCurrentMinute();
                 }
@@ -187,7 +197,7 @@ public class AllAppointmentsActivity extends BaseActivity {
 //                {
 //                    am_pm="AM";
 //                }
-                tv_start_time.setText(hour +":"+ minute);
+                tv_start_time.setText(hour + ":" + minute);
                 startTime.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                     @Override
                     public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
@@ -201,7 +211,7 @@ public class AllAppointmentsActivity extends BaseActivity {
 //                        {
 //                            am_pm="AM";
 //                        }
-                        tv_start_time.setText(hourOfDay +":"+ minute);
+                        tv_start_time.setText(hourOfDay + ":" + minute);
                     }
                 });
 
@@ -209,11 +219,10 @@ public class AllAppointmentsActivity extends BaseActivity {
                 // startTime.setIs24HourView(true);
                 int hour2, minute2;
                 String am_pm2;
-                if (Build.VERSION.SDK_INT >= 23 ){
+                if (Build.VERSION.SDK_INT >= 23) {
                     hour2 = startTime.getHour();
                     minute2 = startTime.getMinute();
-                }
-                else{
+                } else {
                     hour2 = startTime.getCurrentHour();
                     minute2 = startTime.getCurrentMinute();
                 }
@@ -225,7 +234,7 @@ public class AllAppointmentsActivity extends BaseActivity {
 //                {
 //                    am_pm="AM";
 //                }
-                tv_end_time.setText(hour2 +":"+ minute2);
+                tv_end_time.setText(hour2 + ":" + minute2);
                 endTime.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                     @Override
                     public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
@@ -239,19 +248,9 @@ public class AllAppointmentsActivity extends BaseActivity {
 //                        {
 //                            am_pm="AM";
 //                        }
-                        tv_end_time.setText(hourOfDay +":"+ minute);
+                        tv_end_time.setText(hourOfDay + ":" + minute);
                     }
                 });
-
-
-
-
-
-
-
-
-
-
 
 
             }
@@ -266,6 +265,9 @@ public class AllAppointmentsActivity extends BaseActivity {
 
                 customDialog = new Dialog(AllAppointmentsActivity.this, R.style.CustomDialogTheme);
                 customDialog.setContentView(customView);
+
+                customDialog.getWindow().setLayout(((getWidth(AllAppointmentsActivity.this) / 100) * 90),((getHeight(AllAppointmentsActivity.this) / 100) * 80));
+                customDialog.getWindow().setGravity(Gravity.CENTER);
                 customDialog.show();
 //                ivAdd.setColorFilter(ContextCompat.getColor(AllAppointmentsActivity.this, R.color.pink), android.graphics.PorterDuff.Mode.SRC_IN);
 //                tvAdd.setTextColor(getResources().getColor(R.color.pink));
@@ -297,6 +299,7 @@ public class AllAppointmentsActivity extends BaseActivity {
             tvHospitalName.setText(OrganizationName);
             tvSessionTime.setText(SessionTime);
             supportStartPostponedEnterTransition();
+
         }
 
 
@@ -377,9 +380,20 @@ public class AllAppointmentsActivity extends BaseActivity {
 
     }
 
-
+    public static int getWidth(Context context) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager windowmanager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        windowmanager.getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.widthPixels;
+    }
+    public static int getHeight(Context context) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager windowmanager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        windowmanager.getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.heightPixels;
+    }
     private void getlistOfCancelledAppointments() {
-        Call<List<GetListOfCancelledAppointmentsResponse>> call = serviceCalls.getListOfCancelledAppointments("EMPS0001");
+        Call<List<GetListOfCancelledAppointmentsResponse>> call = serviceCalls.getListOfCancelledAppointments(sessionManager.getDOCTORID());
         showDialog();
         call.enqueue(new Callback<List<GetListOfCancelledAppointmentsResponse>>() {
             @Override
@@ -413,7 +427,7 @@ public class AllAppointmentsActivity extends BaseActivity {
     }
 
     private void getlistOfNoShowAppointments() {
-        Call<List<GetListOfNoShowAppointmentsResponse>> call = serviceCalls.getListOfNoShowAppointments("EMPS0001");
+        Call<List<GetListOfNoShowAppointmentsResponse>> call = serviceCalls.getListOfNoShowAppointments(sessionManager.getDOCTORID());
         showDialog();
         call.enqueue(new Callback<List<GetListOfNoShowAppointmentsResponse>>() {
             @Override
@@ -447,7 +461,7 @@ public class AllAppointmentsActivity extends BaseActivity {
     }
 
     public void getAllAppointments() {
-        Call<List<AllAppointmentsResponse>> call = serviceCalls.getAllAppointments("EMPS0001");
+        Call<List<AllAppointmentsResponse>> call = serviceCalls.getAllAppointments(sessionManager.getDOCTORID());
         showDialog();
         call.enqueue(new Callback<List<AllAppointmentsResponse>>() {
             @Override
@@ -483,7 +497,7 @@ public class AllAppointmentsActivity extends BaseActivity {
     }
 
     private void getlistOfConfirmedAppointments() {
-        Call<List<ConfirmedAppointmentsResponse>> call = serviceCalls.getListOfConfirmedAppointments("EMPS0001");
+        Call<List<ConfirmedAppointmentsResponse>> call = serviceCalls.getListOfConfirmedAppointments(sessionManager.getDOCTORID());
 //        showDialog();
         call.enqueue(new Callback<List<ConfirmedAppointmentsResponse>>() {
             @Override
@@ -521,7 +535,7 @@ public class AllAppointmentsActivity extends BaseActivity {
     }
 
     public void getlistOfCancelledAppointmentsSize() {
-        Call<List<GetListOfCancelledAppointmentsResponse>> call = serviceCalls.getListOfCancelledAppointments("EMPS0001");
+        Call<List<GetListOfCancelledAppointmentsResponse>> call = serviceCalls.getListOfCancelledAppointments(sessionManager.getDOCTORID());
         call.enqueue(new Callback<List<GetListOfCancelledAppointmentsResponse>>() {
             @Override
             public void onResponse(Call<List<GetListOfCancelledAppointmentsResponse>> call, Response<List<GetListOfCancelledAppointmentsResponse>> response) {
@@ -543,7 +557,7 @@ public class AllAppointmentsActivity extends BaseActivity {
     }
 
     public void getlistOfNoShowAppointmentsSize() {
-        Call<List<GetListOfNoShowAppointmentsResponse>> call = serviceCalls.getListOfNoShowAppointments("EMPS0001");
+        Call<List<GetListOfNoShowAppointmentsResponse>> call = serviceCalls.getListOfNoShowAppointments(sessionManager.getDOCTORID());
         call.enqueue(new Callback<List<GetListOfNoShowAppointmentsResponse>>() {
             @Override
             public void onResponse(Call<List<GetListOfNoShowAppointmentsResponse>> call, Response<List<GetListOfNoShowAppointmentsResponse>> response) {
@@ -565,7 +579,7 @@ public class AllAppointmentsActivity extends BaseActivity {
     }
 
     public void getlistOfConfirmedAppointmentsSize() {
-        Call<List<ConfirmedAppointmentsResponse>> call = serviceCalls.getListOfConfirmedAppointments("EMPS0001");
+        Call<List<ConfirmedAppointmentsResponse>> call = serviceCalls.getListOfConfirmedAppointments(sessionManager.getDOCTORID());
 //        showDialog();
         call.enqueue(new Callback<List<ConfirmedAppointmentsResponse>>() {
             @Override
@@ -590,7 +604,7 @@ public class AllAppointmentsActivity extends BaseActivity {
     }
 
     public void getAllAppointmentsSize() {
-        Call<List<AllAppointmentsResponse>> call = serviceCalls.getAllAppointments("EMPS0001");
+        Call<List<AllAppointmentsResponse>> call = serviceCalls.getAllAppointments(sessionManager.getDOCTORID());
 //        showDialog();
         call.enqueue(new Callback<List<AllAppointmentsResponse>>() {
             @Override
@@ -616,5 +630,8 @@ public class AllAppointmentsActivity extends BaseActivity {
         });
     }
 
+    public static AllAppointmentsActivity getInstance() {
+        return allAppointmentsActivity;
+    }
 
 }

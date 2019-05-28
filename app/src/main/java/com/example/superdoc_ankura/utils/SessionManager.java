@@ -1,7 +1,10 @@
 package com.example.superdoc_ankura.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+
+import com.example.superdoc_ankura.activities.LoginActivity;
 
 
 /**
@@ -71,18 +74,18 @@ public class SessionManager {
         editor = sharedPreferences.edit();
         editor2 = sharedPreferences.edit();
     }
-public void logout(){
-        editor2.clear();
-        //editor2.commit();
-}
-//    public void logout() {
-//        editor.clear();
-//        editor.commit();
-//        Intent i = new Intent(context, LoginActivity.class);
-//        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        context.startActivity(i);
-//    }
+//public void logout(){
+//        editor2.clear();
+//        //editor2.commit();
+//}
+    public void logout() {
+        editor.clear();
+        editor.commit();
+        Intent i = new Intent(context, LoginActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(i);
+    }
 }
 
 

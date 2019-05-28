@@ -83,9 +83,9 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
             @Override
             public void onStartOpen(SwipeLayout layout) {
                 undo = false;
-               // allAppointmentsActivity.start = false;
-                appid = allAppointmentsResponses.get(i).getApptID();
-                currentAppID = appid;
+                // allAppointmentsActivity.start = false;
+                appid = allAppointmentsResponses.get(holder.getAdapterPosition()).getApptID();
+                //currentAppID = appid;
                 if (layout.getOpenStatus() == SwipeLayout.Status.Open) {
 
                     mItemManger.closeAllExcept(layout);
@@ -104,7 +104,7 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
                         //allAppointmentsActivity.showAlertDialog("START button clicked");
 
 
-                        appid = allAppointmentsResponses.get(i).getApptID();
+                        appid = allAppointmentsResponses.get(holder.getAdapterPosition()).getApptID();
                         currentAppID = appid;
                         Log.d("appid-open", String.valueOf(appid));
 //starting consultaion
@@ -147,11 +147,11 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
                                                 //62319809894
                                                 @Override
                                                 public void onOpen(SwipeLayout layout) {
-                                                    appid = allAppointmentsResponses.get(i).getApptID();
-                                    stopChronometer(holder, appid);
-                                                    holder.swipeLayout2.close();
-                                                    holder.swipeLayout.close();
-                                                    Log.d("appid-sublayout", String.valueOf(appid));
+//                                                    appid = allAppointmentsResponses.get(i).getApptID();
+//                                                    stopChronometer(holder, appid);
+//                                                    holder.swipeLayout2.close();
+//                                                    holder.swipeLayout.close();
+//                                                    Log.d("appid-sublayout", String.valueOf(appid));
 
                                                 }
 
@@ -194,10 +194,6 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
                 }
 
 
-
-
-
-
             }
 
             @Override
@@ -214,10 +210,10 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
                     undo = false;
                     holder.swipeLayout.setSwipeEnabled(true);
                     if (holder.layout_timer.getVisibility() == View.VISIBLE) {
-                        stopChronometer(holder, currentAppID);
-                    }else {
-                        resetChronometer(holder,currentAppID);
-                        Log.d("appid-close", String.valueOf(currentAppID));
+                        stopChronometer(holder, allAppointmentsResponses.get(holder.getAdapterPosition()).getApptID());
+                    } else {
+                        resetChronometer(holder, allAppointmentsResponses.get(holder.getAdapterPosition()).getApptID());
+                        Log.d("appid-close", String.valueOf(allAppointmentsResponses.get(holder.getAdapterPosition()).getApptID()));
                     }
 
                     BaseActivity.getInstance().showToast("undo not clicked");
@@ -245,12 +241,18 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
         holder.checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                appid = allAppointmentsResponses.get(i).getApptID();
+                appid = allAppointmentsResponses.get(holder.getAdapterPosition()).getApptID();
                 stopChronometer(holder, appid);
                 holder.swipeLayout2.close();
                 holder.swipeLayout.close();
                 holder.swipeLayout.setSwipeEnabled(true);
 //                checkOut(holder, appid);
+            }
+        });
+        holder.markFollowUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allAppointmentsActivity.showToast("MARK FOLLOWUP"+allAppointmentsResponses.get(holder.getAdapterPosition()).getApptID());
             }
         });
 
@@ -265,14 +267,13 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
 //                allAppointmentsActivity.allAppointmentsAdapter.notifyDataSetChanged();
 
 
-
                 resetChronometer(holder, allAppointmentsResponses.get(holder.getAdapterPosition()).getApptID());
             }
         });
         holder.startConsult.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                appid = allAppointmentsResponses.get(i).getApptID();
+                appid = allAppointmentsResponses.get(holder.getAdapterPosition()).getApptID();
 //                boolean value = allAppointmentsResponses.get(i).isStartConsultation();
 //                if (value == true) {
 //                    startConsult = 1;
@@ -286,14 +287,14 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
         holder.cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                appid = allAppointmentsResponses.get(i).getApptID();
+                appid = allAppointmentsResponses.get(holder.getAdapterPosition()).getApptID();
                 cancelAppointment(holder, appid);
             }
         });
         holder.noshow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                appid = allAppointmentsResponses.get(i).getApptID();
+                appid = allAppointmentsResponses.get(holder.getAdapterPosition()).getApptID();
                 boolean isShow = true;
                 noShowAppointment(appid, isShow, holder);
             }
@@ -381,7 +382,7 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
 
         holder.chronometer.setBase(SystemClock.elapsedRealtime());
         holder.pauseOffSet = 0;
-        BaseActivity.getInstance().showToast("chronometer-reset");
+        BaseActivity.getInstance().showToast("chronometer-reset" + appid);
 
     }
 

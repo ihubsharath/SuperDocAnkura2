@@ -16,9 +16,21 @@
         <item name="android:typeface">serif</item>
 
     </style>
+    <style name="AppTheme.NoActionBar.FullScreen2" parent="AppTheme.NoActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:typeface">serif</item>
+    </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowNoTitle">true</item>
-        <item name="android:typeface">serif</item>
+
+    </style>
+
+
+    <style name="TextSize">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="AlertDialogColor" parent="Theme.AppCompat.Light.Dialog.Alert">
@@ -33,4 +45,14 @@
         <!--dialog background-->
         <item name="android:windowBackground">@drawable/background_dialog</item>
     </style>
+
+    <style name="MarkLeaveDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <!--buttons color-->
+        <item name="colorAccent">@color/colorPrimaryDark</item>
+        <!--title and message color-->
+        <item name="android:textColorPrimary">#000000</item>
+        <!--dialog background-->
+        <item name="android:windowBackground">@drawable/background_mark_leave</item>
+    </style>
+
 </resources>

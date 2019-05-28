@@ -1,12 +1,16 @@
 package com.example.superdoc_ankura.adapters;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +37,7 @@ public class DoctorSessionAdapter extends RecyclerView.Adapter<DoctorSessionHold
         LayoutInflater inflater = LayoutInflater.from(doctorSessionActivity);
         View view = inflater.inflate(R.layout.doctor_session_itemview, viewGroup, false);
         DoctorSessionHolder holder = new DoctorSessionHolder(view);
+
         return holder;
     }
 
@@ -45,6 +50,7 @@ public class DoctorSessionAdapter extends RecyclerView.Adapter<DoctorSessionHold
         ViewCompat.setTransitionName(holder.cardView, doctorSessionResponses.get(i).getOrganizationName());
 
         holder.cardview_item.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
 //                Intent i = new Intent(doctorSessionActivity, AllAppointmentsActivity.class);
@@ -56,6 +62,12 @@ public class DoctorSessionAdapter extends RecyclerView.Adapter<DoctorSessionHold
                 intent.putExtra("OrganizationName", doctorSessionResponses.get(i).getOrganizationName());
                 intent.putExtra("SessionTime", doctorSessionResponses.get(i).getSessionTime());
 
+//                Pair[] pairs = new Pair[4];
+//                pairs[0] = new Pair<View,String>(holder.tvDate,"count");
+//                pairs[1] = new Pair<View,String>(holder.tvHospitalName,"hospital");
+//                pairs[2] = new Pair<View,String>(holder.tvFromToTime,"time");
+//                pairs[3] = new Pair<View,String>(holder.cardView,"sessionTransition");
+
                 intent.putExtra("name", ViewCompat.getTransitionName(holder.cardView));
 
                 ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -63,7 +75,9 @@ public class DoctorSessionAdapter extends RecyclerView.Adapter<DoctorSessionHold
                         holder.cardView,
                         ViewCompat.getTransitionName(holder.cardView));
 
+//                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(doctorSessionActivity, pairs);
                 ActivityCompat.startActivity(doctorSessionActivity, intent, options.toBundle());
+
 
 
 

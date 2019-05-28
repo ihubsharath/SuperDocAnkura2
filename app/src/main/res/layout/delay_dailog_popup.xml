@@ -60,15 +60,15 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="128dp"
+            android:layout_height="120dp"
             android:orientation="horizontal"
             android:weightSum="10">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:gravity="center|top"
+                android:layout_weight="5"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <TextView
@@ -82,38 +82,23 @@
 
                 <TextView
                     android:id="@+id/tv_start_time"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="02:00 PM"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
                     android:textStyle="bold"
+                    android:background="@drawable/underline"
                     android:textColor="#1B2036"
                     android:layout_marginTop="10dp"
                     android:textSize="18sp" />
             </LinearLayout>
-            <TimePicker
-                android:id="@+id/start_time"
-                android:layout_width="0dp"
-                android:layout_weight="7"
-                android:timePickerMode="spinner"
-                android:layout_height="match_parent"/>
-
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#C5C4C4"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="128dp"
-            android:weightSum="10"
-            android:orientation="horizontal">
-
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:gravity="center|top"
+                android:layout_weight="5"
+                android:gravity="center"
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/tv_end"
@@ -126,21 +111,49 @@
 
                 <TextView
                     android:id="@+id/tv_end_time"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
                     android:text="02:45 PM"
+                    android:background="@drawable/underline"
                     android:textColor="#1B2036"
                     android:textStyle="bold"
                     android:layout_marginTop="10dp"
                     android:textSize="18sp" />
             </LinearLayout>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="128dp"
+            android:weightSum="10"
+            android:orientation="horizontal">
+
+            <TimePicker
+                android:id="@+id/start_time"
+                android:layout_width="0dp"
+                android:layout_weight="5"
+                android:layout_height="match_parent"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                style="@style/TextSize"
+                android:layout_marginLeft="-30dp"
+                android:layout_marginRight="-30dp"
+                android:timePickerMode="spinner"/>
             <TimePicker
                 android:id="@+id/end_time"
                 android:layout_width="0dp"
-                android:layout_weight="7"
-                android:timePickerMode="spinner"
-                android:layout_height="match_parent"/>
+                android:layout_weight="5"
+                android:layout_height="match_parent"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                style="@style/TextSize"
+                android:layout_marginLeft="-30dp"
+                android:layout_marginRight="-30dp"
+                android:timePickerMode="spinner"/>
 
 
         </LinearLayout>

@@ -22,7 +22,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:background="@drawable/top"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:transitionName="sessionTransition">
 
 
                 <LinearLayout
@@ -38,7 +39,8 @@
                         android:gravity="center"
                         android:text="0"
                         android:textColor="#ffffff"
-                        android:textSize="50sp" />
+                        android:textSize="50sp"
+                        android:transitionName="count"/>
                 </LinearLayout>
 
                 <View
@@ -62,7 +64,8 @@
                         android:gravity="center|bottom"
                         android:text="Ankura Hospital"
                         android:textColor="#ffffff"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:transitionName="hospital"/>
 
                     <TextView
                         android:id="@+id/tv_session_time"
@@ -72,7 +75,8 @@
                         android:layout_weight="5"
                         android:gravity="center|top"
                         android:text="12:00 PM - 02:45 PM"
-                        android:textColor="#ffffff" />
+                        android:textColor="#ffffff"
+                        android:transitionName="time"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -175,7 +179,6 @@
                     android:textColor="@color/colorPrimaryDark" />
 
                 <TextView
-
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
