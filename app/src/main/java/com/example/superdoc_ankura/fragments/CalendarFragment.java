@@ -26,8 +26,10 @@ import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.example.superdoc_ankura.R;
 import com.example.superdoc_ankura.activities.DrawableUtils;
 import com.example.superdoc_ankura.pojos.response.ListOfTotalCountsWithDatesResponse;
+import com.example.superdoc_ankura.pojos.response.ListOfTotalCountsWithDatesResponse2;
 import com.example.superdoc_ankura.utils.BaseActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -51,16 +53,46 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
         markLeave = view.findViewById(R.id.imageMarkLeave);
         List<EventDay> events = new ArrayList<>();
         appointmentCount = new ArrayList<>();
-        Call<ArrayList<ListOfTotalCountsWithDatesResponse>> call =
-                BaseActivity.getInstance().serviceCalls.getListOfTotalCountsWithDates(BaseActivity.getInstance().sessionManager.getDOCTORID());
-        call.enqueue(new Callback<ArrayList<ListOfTotalCountsWithDatesResponse>>() {
+        Call<ArrayList<ListOfTotalCountsWithDatesResponse2>> call = BaseActivity.getInstance().serviceCalls.getListOfTotalCountsWithDates("EMPN0001");
+        call.enqueue(new Callback<ArrayList<ListOfTotalCountsWithDatesResponse2>>() {
             @Override
-            public void onResponse(Call<ArrayList<ListOfTotalCountsWithDatesResponse>> call, Response<ArrayList<ListOfTotalCountsWithDatesResponse>> response) {
-                ArrayList<ListOfTotalCountsWithDatesResponse> listOfTotalCountsWithDatesResponses = response.body();
-                appointmentCount = new ArrayList<>();
-                for (ListOfTotalCountsWithDatesResponse c:listOfTotalCountsWithDatesResponses){
-                    appointmentCount.add(String.valueOf(c.getAppointmentsCount()));
-                }
+            public void onResponse(Call<ArrayList<ListOfTotalCountsWithDatesResponse2>> call, Response<ArrayList<ListOfTotalCountsWithDatesResponse2>> response) {
+                ArrayList<ListOfTotalCountsWithDatesResponse2> listOfTotalCountsWithDatesResponses = response.body();
+               for (int i= 0 ; i< listOfTotalCountsWithDatesResponses.size();i++){
+
+                   String dateStr = listOfTotalCountsWithDatesResponses.get(i).getDate();
+
+                    String [] dateParts = dateStr.split("-");
+                    String year = dateParts[0];
+                    String month = dateParts[1];
+                    String day = dateParts[2];
+
+                  int count= listOfTotalCountsWithDatesResponses.get(i).getAppointmentsCount();
+
+                   Calendar cal = Calendar.getInstance();
+                    cal.set(Integer.parseInt(year), Integer.parseInt(month)-1,Integer.parseInt(day));
+                  // cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day));
+                    events.add(new EventDay(cal, DrawableUtils.getCircleDrawableWithText(getActivity(),String.valueOf(count))));
+                    calendarView.setEvents(events);
+
+               }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<ListOfTotalCountsWithDatesResponse2>> call, Throwable t) {
+
+            }
+        });
+//        Call<ArrayList<ListOfTotalCountsWithDatesResponse2>> call =
+//                BaseActivity.getInstance().serviceCalls.getListOfTotalCountsWithDates(BaseActivity.getInstance().sessionManager.getDOCTORID());
+//        call.enqueue(new Callback<ArrayList<ListOfTotalCountsWithDatesResponse2>>() {
+//            @Override
+//            public void onResponse(Call<ArrayList<ListOfTotalCountsWithDatesResponse2>> call, Response<ArrayList<ListOfTotalCountsWithDatesResponse2>> response) {
+//                ArrayList<ListOfTotalCountsWithDatesResponse2> listOfTotalCountsWithDatesResponses = response.body();
+//                appointmentCount = new ArrayList<>();
+//                for (ListOfTotalCountsWithDatesResponse2 c:listOfTotalCountsWithDatesResponses){
+//                    appointmentCount.add(String.valueOf(c.getAppointmentsCount()));
+//                }
 
               //  MyEventDay myEventDay = …
 
@@ -80,14 +112,14 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
 //                    Log.d("dateslist",cal.toString());
 //                    Log.d("dates",cal.toString());
 
-                calendarView.setEvents(events);
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<ListOfTotalCountsWithDatesResponse>> call, Throwable t) {
-
-            }
-        });
+//                calendarView.setEvents(events);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ArrayList<ListOfTotalCountsWithDatesResponse2>> call, Throwable t) {
+//
+//            }
+//        });
 
 
 //        appointmentCount.add("10");
@@ -127,23 +159,28 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
 //        appointmentCount.add("30");
 //        appointmentCount.add("12");
 //        appointmentCount.add("14");
-for(int i=1;i<=31;i++){
-    Calendar cal = Calendar.getInstance();
-    cal.set(Calendar.DAY_OF_MONTH, i);
-    //cal.set(Integer.parseInt(year), Integer.parseInt(month)-1,Integer.parseInt(day));
-    events.add(new EventDay(cal, DrawableUtils.getCircleDrawableWithText(getActivity(),appointmentCount.get(i-1))));
-    Log.d("dateslist",cal.toString());
-    Log.d("dates",cal.toString());
+//for(int i=1;i<=31;i++){
+//    Calendar cal = Calendar.getInstance();
+//    cal.set(Calendar.DAY_OF_MONTH, i);
+//    //cal.set(Integer.parseInt(year), Integer.parseInt(month)-1,Integer.parseInt(day));
+//    events.add(new EventDay(cal, DrawableUtils.getCircleDrawableWithText(getActivity(),appointmentCount.get(i-1))));
+//    Log.d("dateslist",cal.toString());
+//    Log.d("dates",cal.toString());
+//
+//}
 
-}
-
-        calendarView.setEvents(events);
+//        calendarView.setEvents(events);
 
         calendarView.setOnDayClickListener(new OnDayClickListener() {
             @Override
             public void onDayClick(EventDay eventDay) {
                 Calendar selectedDate = eventDay.getCalendar();
-                Log.d("selectedDate",selectedDate.toString());
+                SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy");
+                String formatted = format1.format(selectedDate.getTime());
+                Log.d("selectedDate", formatted);
+//
+//                List<Calendar> selectedDates = calendarView.getSelectedDates();
+//                Log.d("selectedDate2", selectedDates.toString());
             }
         });
 

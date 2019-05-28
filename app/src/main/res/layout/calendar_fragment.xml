@@ -111,6 +111,8 @@
             app:forwardButtonSrc="@drawable/rightarrow"
             app:headerColor="#ffffff"
             app:headerLabelColor="#000000"
+            app:type="many_days_picker"
+            app:eventsEnabled="true"
             app:previousButtonSrc="@drawable/ic_keyboard_arrow_left_black_24dp" />
 
     </LinearLayout>

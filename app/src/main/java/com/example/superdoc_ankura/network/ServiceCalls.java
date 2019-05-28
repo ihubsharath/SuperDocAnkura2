@@ -20,6 +20,7 @@ import com.example.superdoc_ankura.pojos.response.DoctorSessionResponse;
 import com.example.superdoc_ankura.pojos.response.GetListOfCancelledAppointmentsResponse;
 import com.example.superdoc_ankura.pojos.response.GetListOfNoShowAppointmentsResponse;
 import com.example.superdoc_ankura.pojos.response.ListOfTotalCountsWithDatesResponse;
+import com.example.superdoc_ankura.pojos.response.ListOfTotalCountsWithDatesResponse2;
 import com.example.superdoc_ankura.pojos.response.LoginResponse;
 import com.example.superdoc_ankura.pojos.response.NoShowAppointmentsResponse;
 import com.example.superdoc_ankura.pojos.response.StartConsultantResponse;
@@ -95,5 +96,5 @@ public interface ServiceCalls {
     Call<LoginResponse> doLogin(@Body LoginRequest loginRequest);
 
     @GET("listOfAppointmentsCountWithDatesV2")
-    Call<ArrayList<ListOfTotalCountsWithDatesResponse>> getListOfTotalCountsWithDates(@Query("doctorId") String doctorid);
+    Call<ArrayList<ListOfTotalCountsWithDatesResponse2>> getListOfTotalCountsWithDates(@Query("doctorId") String doctorid);
 }
