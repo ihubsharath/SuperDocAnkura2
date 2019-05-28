@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +59,8 @@ public class DoctorSessionAdapter extends RecyclerView.Adapter<DoctorSessionHold
 
 
                 Intent intent = new Intent(doctorSessionActivity, AllAppointmentsActivity.class);
+
+                intent.putExtra("sessionid",String.valueOf(doctorSessionResponses.get(i).getDoctorSessionId()));
                 intent.putExtra("AppointmentsCount", String.valueOf(doctorSessionResponses.get(i).getTodayAppointmentsCount()));
                 intent.putExtra("OrganizationName", doctorSessionResponses.get(i).getOrganizationName());
                 intent.putExtra("SessionTime", doctorSessionResponses.get(i).getSessionTime());

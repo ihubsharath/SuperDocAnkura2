@@ -66,7 +66,7 @@ public class AllAppointmentsActivity extends BaseActivity {
     public NoShowAppointmentsAdapter noShowAppointmentsAdapter;
     public CancelledAppointmentsAdapter cancelledAppointmentsAdapter;
 
-    String AppointmentsCount, OrganizationName, SessionTime;
+    public  String sessionId, AppointmentsCount, OrganizationName, SessionTime;
     int int_allAppointmentsSize, int_noshowAppointmentsSize, int_checkinAppointmentsSize, int_cancelAppointmentsSize;
     public boolean start;
     public boolean stop;
@@ -89,6 +89,9 @@ public class AllAppointmentsActivity extends BaseActivity {
             }
 
         });
+
+
+
         llStart = findViewById(R.id.ll_start);
         llDelay = findViewById(R.id.ll_delay);
         llAdd = findViewById(R.id.ll_add);
@@ -107,9 +110,8 @@ public class AllAppointmentsActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 start = true;
-                Log.d("sharath", "entered into onclick");
+
                 if (tvStart.getText().toString().equals("START")) {
-                    Log.d("sharath", "entered into onclick and if condition");
                     ivStart.setColorFilter(ContextCompat.getColor(AllAppointmentsActivity.this, R.color.pink), android.graphics.PorterDuff.Mode.SRC_IN);
                     tvStart.setText("STOP");
                     tvStart.setTextColor(getResources().getColor(R.color.pink));
@@ -153,7 +155,7 @@ public class AllAppointmentsActivity extends BaseActivity {
                 dialog.setContentView(customView);
 
 
-dialog.getWindow().setLayout(((getWidth(AllAppointmentsActivity.this) / 100) * 90),((getHeight(AllAppointmentsActivity.this) / 100) * 80));
+                dialog.getWindow().setLayout(((getWidth(AllAppointmentsActivity.this) / 100) * 90), ((getHeight(AllAppointmentsActivity.this) / 100) * 80));
                 dialog.getWindow().setGravity(Gravity.CENTER);
                 dialog.show();
                 final TimePicker startTime = dialog.findViewById(R.id.start_time);
@@ -266,13 +268,15 @@ dialog.getWindow().setLayout(((getWidth(AllAppointmentsActivity.this) / 100) * 9
                 customDialog = new Dialog(AllAppointmentsActivity.this, R.style.CustomDialogTheme);
                 customDialog.setContentView(customView);
 
-                customDialog.getWindow().setLayout(((getWidth(AllAppointmentsActivity.this) / 100) * 90),((getHeight(AllAppointmentsActivity.this) / 100) * 80));
+                customDialog.getWindow().setLayout(((getWidth(AllAppointmentsActivity.this) / 100) * 90), ((getHeight(AllAppointmentsActivity.this) / 100) * 80));
                 customDialog.getWindow().setGravity(Gravity.CENTER);
                 customDialog.show();
 //                ivAdd.setColorFilter(ContextCompat.getColor(AllAppointmentsActivity.this, R.color.pink), android.graphics.PorterDuff.Mode.SRC_IN);
 //                tvAdd.setTextColor(getResources().getColor(R.color.pink));
             }
         });
+        sessionId = getIntent().getExtras().getString("sessionid");
+
         AppointmentsCount = getIntent().getExtras().getString("AppointmentsCount");
         OrganizationName = getIntent().getExtras().getString("OrganizationName");
         SessionTime = getIntent().getExtras().getString("SessionTime");
@@ -386,14 +390,16 @@ dialog.getWindow().setLayout(((getWidth(AllAppointmentsActivity.this) / 100) * 9
         windowmanager.getDefaultDisplay().getMetrics(displayMetrics);
         return displayMetrics.widthPixels;
     }
+
     public static int getHeight(Context context) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         WindowManager windowmanager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         windowmanager.getDefaultDisplay().getMetrics(displayMetrics);
         return displayMetrics.heightPixels;
     }
+
     private void getlistOfCancelledAppointments() {
-        Call<List<GetListOfCancelledAppointmentsResponse>> call = serviceCalls.getListOfCancelledAppointments(sessionManager.getDOCTORID());
+        Call<List<GetListOfCancelledAppointmentsResponse>> call = serviceCalls.getListOfCancelledAppointments(sessionManager.getDOCTORID(), sessionId);
         showDialog();
         call.enqueue(new Callback<List<GetListOfCancelledAppointmentsResponse>>() {
             @Override
@@ -427,7 +433,7 @@ dialog.getWindow().setLayout(((getWidth(AllAppointmentsActivity.this) / 100) * 9
     }
 
     private void getlistOfNoShowAppointments() {
-        Call<List<GetListOfNoShowAppointmentsResponse>> call = serviceCalls.getListOfNoShowAppointments(sessionManager.getDOCTORID());
+        Call<List<GetListOfNoShowAppointmentsResponse>> call = serviceCalls.getListOfNoShowAppointments(sessionManager.getDOCTORID(), sessionId);
         showDialog();
         call.enqueue(new Callback<List<GetListOfNoShowAppointmentsResponse>>() {
             @Override
@@ -461,7 +467,8 @@ dialog.getWindow().setLayout(((getWidth(AllAppointmentsActivity.this) / 100) * 9
     }
 
     public void getAllAppointments() {
-        Call<List<AllAppointmentsResponse>> call = serviceCalls.getAllAppointments(sessionManager.getDOCTORID());
+        Call<List<AllAppointmentsResponse>> call = serviceCalls.getAllAppointments(sessionManager.getDOCTORID(), sessionId);
+
         showDialog();
         call.enqueue(new Callback<List<AllAppointmentsResponse>>() {
             @Override
@@ -497,7 +504,7 @@ dialog.getWindow().setLayout(((getWidth(AllAppointmentsActivity.this) / 100) * 9
     }
 
     private void getlistOfConfirmedAppointments() {
-        Call<List<ConfirmedAppointmentsResponse>> call = serviceCalls.getListOfConfirmedAppointments(sessionManager.getDOCTORID());
+        Call<List<ConfirmedAppointmentsResponse>> call = serviceCalls.getListOfConfirmedAppointments(sessionManager.getDOCTORID(), sessionId);
 //        showDialog();
         call.enqueue(new Callback<List<ConfirmedAppointmentsResponse>>() {
             @Override
@@ -535,7 +542,7 @@ dialog.getWindow().setLayout(((getWidth(AllAppointmentsActivity.this) / 100) * 9
     }
 
     public void getlistOfCancelledAppointmentsSize() {
-        Call<List<GetListOfCancelledAppointmentsResponse>> call = serviceCalls.getListOfCancelledAppointments(sessionManager.getDOCTORID());
+        Call<List<GetListOfCancelledAppointmentsResponse>> call = serviceCalls.getListOfCancelledAppointments(sessionManager.getDOCTORID(), sessionId);
         call.enqueue(new Callback<List<GetListOfCancelledAppointmentsResponse>>() {
             @Override
             public void onResponse(Call<List<GetListOfCancelledAppointmentsResponse>> call, Response<List<GetListOfCancelledAppointmentsResponse>> response) {
@@ -557,7 +564,7 @@ dialog.getWindow().setLayout(((getWidth(AllAppointmentsActivity.this) / 100) * 9
     }
 
     public void getlistOfNoShowAppointmentsSize() {
-        Call<List<GetListOfNoShowAppointmentsResponse>> call = serviceCalls.getListOfNoShowAppointments(sessionManager.getDOCTORID());
+        Call<List<GetListOfNoShowAppointmentsResponse>> call = serviceCalls.getListOfNoShowAppointments(sessionManager.getDOCTORID(), sessionId);
         call.enqueue(new Callback<List<GetListOfNoShowAppointmentsResponse>>() {
             @Override
             public void onResponse(Call<List<GetListOfNoShowAppointmentsResponse>> call, Response<List<GetListOfNoShowAppointmentsResponse>> response) {
@@ -579,7 +586,7 @@ dialog.getWindow().setLayout(((getWidth(AllAppointmentsActivity.this) / 100) * 9
     }
 
     public void getlistOfConfirmedAppointmentsSize() {
-        Call<List<ConfirmedAppointmentsResponse>> call = serviceCalls.getListOfConfirmedAppointments(sessionManager.getDOCTORID());
+        Call<List<ConfirmedAppointmentsResponse>> call = serviceCalls.getListOfConfirmedAppointments(sessionManager.getDOCTORID(), sessionId);
 //        showDialog();
         call.enqueue(new Callback<List<ConfirmedAppointmentsResponse>>() {
             @Override
@@ -604,7 +611,7 @@ dialog.getWindow().setLayout(((getWidth(AllAppointmentsActivity.this) / 100) * 9
     }
 
     public void getAllAppointmentsSize() {
-        Call<List<AllAppointmentsResponse>> call = serviceCalls.getAllAppointments(sessionManager.getDOCTORID());
+        Call<List<AllAppointmentsResponse>> call = serviceCalls.getAllAppointments(sessionManager.getDOCTORID(), sessionId);
 //        showDialog();
         call.enqueue(new Callback<List<AllAppointmentsResponse>>() {
             @Override

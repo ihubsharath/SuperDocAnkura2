@@ -14,25 +14,26 @@ import com.example.superdoc_ankura.R;
 public class AllAppointmentsHolder extends RecyclerView.ViewHolder {
     //testing
 
-
-
-
+public TextView tvStatus, tvStatus2;
+    public ImageView isFirst, isWalkin;
     public SwipeLayout swipeLayout, swipeLayout2;
     public TextView checkout, markFollowUp;
-    public TextView tvTime,tvPatientName,tvApptStatus,tvTime2,tvPatientName2,tvApptStatus2;
-    public LinearLayout left_to_right_undo,right_to_left, left;;
-    public TextView cancel,noshow;
-public LinearLayout startConsult;
-    public TextView tvStart,tvConsult,tvUndoText;
+    public TextView tvTime, tvPatientName, tvApptProcedure, tvTime2, tvPatientName2, tvApptProcedure2;
+    public LinearLayout left_to_right_undo, right_to_left, left;
+    ;
+    public TextView cancel, noshow;
+    public LinearLayout startConsult;
+    public TextView tvStart, tvConsult, tvUndoText;
     public ImageView ivUndoImage;
     public LinearLayout undo;
-//public Button checkout;
+    //public Button checkout;
     public LinearLayout layout_timer;
     public LinearLayout layout_undo;
 
     public Chronometer chronometer;
     public long pauseOffSet;
     public boolean running;
+
     public AllAppointmentsHolder(@NonNull View itemView) {
         super(itemView);
         swipeLayout = itemView.findViewById(R.id.swipe);
@@ -44,11 +45,11 @@ public LinearLayout startConsult;
 
         tvTime = itemView.findViewById(R.id.tv_time);
         tvPatientName = itemView.findViewById(R.id.tv_patient_name);
-        tvApptStatus = itemView.findViewById(R.id.tv_status);
+        tvApptProcedure = itemView.findViewById(R.id.tv_procedure);
 
         tvTime2 = itemView.findViewById(R.id.tv_time2);
         tvPatientName2 = itemView.findViewById(R.id.tv_patient_name2);
-        tvApptStatus2 = itemView.findViewById(R.id.tv_status2);
+        tvApptProcedure2 = itemView.findViewById(R.id.tv_procedure2);
 
         cancel = itemView.findViewById(R.id.cancel);
         noshow = itemView.findViewById(R.id.noshow);
@@ -65,9 +66,11 @@ public LinearLayout startConsult;
         chronometer = itemView.findViewById(R.id.chronometer);
         layout_undo = itemView.findViewById(R.id.layout_undo);
 
-
-
-    //testing
+        isFirst = itemView.findViewById(R.id.isFirst);
+        isWalkin = itemView.findViewById(R.id.isWalkin);
+        tvStatus = itemView.findViewById(R.id.tv_status);
+        tvStatus2 = itemView.findViewById(R.id.tvStatus2);
+        //testing
 
     }
 }

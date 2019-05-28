@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +60,7 @@ public class DashboardFragment extends Fragment {
 
                 if (response.code() == 200) {
                     List<DoctorSessionResponse> doctorSessionResponses = response.body();
+                    Log.d("sessionid",doctorSessionResponses.toString());
                     //doctorSessionResponsesSize = doctorSessionResponsesSize.si
                     if (doctorSessionResponses.size() == 0) {
                         rview.setAdapter(null);
@@ -72,7 +74,12 @@ public class DashboardFragment extends Fragment {
                         doctorSessionAdapter.notifyDataSetChanged();
                     }
                 } else {
-                    ((BaseActivity) getActivity()).showAlertDialog("Error :" + response.code());
+                    try {
+                        ((BaseActivity) getActivity()).showAlertDialog("Error :" + response.code());
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
                 }
             }
 

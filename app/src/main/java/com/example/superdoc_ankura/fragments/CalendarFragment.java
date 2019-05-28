@@ -38,104 +38,106 @@ import retrofit2.Response;
 
 public class CalendarFragment extends android.support.v4.app.Fragment {
     ImageView markLeave;
-    Dialog dialog1,dialog2,dialog3;
+    Dialog dialog1, dialog2, dialog3;
     List<String> appointmentCount;
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.calendar_fragment,container,false);
+        View view = inflater.inflate(R.layout.calendar_fragment, container, false);
 
 
         CalendarView calendarView = view.findViewById(R.id.calendarView);
         markLeave = view.findViewById(R.id.imageMarkLeave);
         List<EventDay> events = new ArrayList<>();
         appointmentCount = new ArrayList<>();
-        Call<ArrayList<ListOfTotalCountsWithDatesResponse>> call =
-                BaseActivity.getInstance().serviceCalls.getListOfTotalCountsWithDates(BaseActivity.getInstance().sessionManager.getDOCTORID());
-        call.enqueue(new Callback<ArrayList<ListOfTotalCountsWithDatesResponse>>() {
-            @Override
-            public void onResponse(Call<ArrayList<ListOfTotalCountsWithDatesResponse>> call, Response<ArrayList<ListOfTotalCountsWithDatesResponse>> response) {
-                ArrayList<ListOfTotalCountsWithDatesResponse> listOfTotalCountsWithDatesResponses = response.body();
-                appointmentCount = new ArrayList<>();
-                for (ListOfTotalCountsWithDatesResponse c:listOfTotalCountsWithDatesResponses){
-                    appointmentCount.add(String.valueOf(c.getAppointmentsCount()));
-                }
-
-              //  MyEventDay myEventDay = …
-
-//                Log.d("madhu", listOfTotalCountsWithDatesResponses.toString());
-//                String dateStr = null;
-//                for (int i = 1; i <= listOfTotalCountsWithDatesResponses.size(); i++) {
-//                     dateStr = listOfTotalCountsWithDatesResponses.get(1).getDate();
+//        Call<ArrayList<ListOfTotalCountsWithDatesResponse>> call =
+//                BaseActivity.getInstance().serviceCalls.getListOfTotalCountsWithDates(BaseActivity.getInstance().sessionManager.getDOCTORID());
+//        call.enqueue(new Callback<ArrayList<ListOfTotalCountsWithDatesResponse>>() {
+//            @Override
+//            public void onResponse(Call<ArrayList<ListOfTotalCountsWithDatesResponse>> call, Response<ArrayList<ListOfTotalCountsWithDatesResponse>> response) {
+//                ArrayList<ListOfTotalCountsWithDatesResponse> listOfTotalCountsWithDatesResponses = response.body();
+//                Log.d("listoftotal",listOfTotalCountsWithDatesResponses.toString());
+//                appointmentCount = new ArrayList<>();
+//                for (ListOfTotalCountsWithDatesResponse c : listOfTotalCountsWithDatesResponses) {
+//                    appointmentCount.add(String.valueOf(c.getAppointmentsCount()));
 //                }
-//                    String [] dateParts = dateStr.split("-");
-//                    String day = dateParts[0];
-//                    String month = dateParts[1];
-//                    String year = dateParts[2];
 //
-//                    Calendar cal = Calendar.getInstance();
-//                    cal.set(Integer.parseInt(year), Integer.parseInt(month)-1,Integer.parseInt(day));
-//                    events.add(new EventDay(cal, DrawableUtils.getCircleDrawableWithText(getActivity(),"9")));
-//                    Log.d("dateslist",cal.toString());
-//                    Log.d("dates",cal.toString());
+//                //  MyEventDay myEventDay = …
+//
+////                Log.d("madhu", listOfTotalCountsWithDatesResponses.toString());
+////                String dateStr = null;
+////                for (int i = 1; i <= listOfTotalCountsWithDatesResponses.size(); i++) {
+////                     dateStr = listOfTotalCountsWithDatesResponses.get(1).getDate();
+////                }
+////                    String [] dateParts = dateStr.split("-");
+////                    String day = dateParts[0];
+////                    String month = dateParts[1];
+////                    String year = dateParts[2];
+////
+////                    Calendar cal = Calendar.getInstance();
+////                    cal.set(Integer.parseInt(year), Integer.parseInt(month)-1,Integer.parseInt(day));
+////                    events.add(new EventDay(cal, DrawableUtils.getCircleDrawableWithText(getActivity(),"9")));
+////                    Log.d("dateslist",cal.toString());
+////                    Log.d("dates",cal.toString());
+//
+//                calendarView.setEvents(events);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ArrayList<ListOfTotalCountsWithDatesResponse>> call, Throwable t) {
+//
+//            }
+//        });
 
-                calendarView.setEvents(events);
-            }
 
-            @Override
-            public void onFailure(Call<ArrayList<ListOfTotalCountsWithDatesResponse>> call, Throwable t) {
+        appointmentCount.add("10");
+        appointmentCount.add("45");
+        appointmentCount.add("19");
+        appointmentCount.add("21");
+        appointmentCount.add("25");
 
-            }
-        });
+        appointmentCount.add("22");
+        appointmentCount.add("30");
+        appointmentCount.add("12");
+        appointmentCount.add("14");
+        appointmentCount.add("15");
+
+        appointmentCount.add("20");
+        appointmentCount.add("10");
+        appointmentCount.add("45");
+        appointmentCount.add("19");
+        appointmentCount.add("21");
+
+        appointmentCount.add("25");
+        appointmentCount.add("22");
+        appointmentCount.add("30");
+        appointmentCount.add("12");
+        appointmentCount.add("14");
+
+        appointmentCount.add("15");
+        appointmentCount.add("20");
+        appointmentCount.add("10");
+        appointmentCount.add("45");
+        appointmentCount.add("19");
 
 
-//        appointmentCount.add("10");
-//        appointmentCount.add("45");
-//        appointmentCount.add("19");
-//        appointmentCount.add("21");
-//        appointmentCount.add("25");
-//
-//        appointmentCount.add("22");
-//        appointmentCount.add("30");
-//        appointmentCount.add("12");
-//        appointmentCount.add("14");
-//        appointmentCount.add("15");
-//
-//        appointmentCount.add("20");
-//        appointmentCount.add("10");
-//        appointmentCount.add("45");
-//        appointmentCount.add("19");
-//        appointmentCount.add("21");
-//
-//        appointmentCount.add("25");
-//        appointmentCount.add("22");
-//        appointmentCount.add("30");
-//        appointmentCount.add("12");
-//        appointmentCount.add("14");
-//
-//        appointmentCount.add("15");
-//        appointmentCount.add("20");
-//        appointmentCount.add("10");
-//        appointmentCount.add("45");
-//        appointmentCount.add("19");
-//
-//
-//        appointmentCount.add("21");
-//        appointmentCount.add("25");
-//        appointmentCount.add("22");
-//        appointmentCount.add("30");
-//        appointmentCount.add("12");
-//        appointmentCount.add("14");
-for(int i=1;i<=31;i++){
-    Calendar cal = Calendar.getInstance();
-    cal.set(Calendar.DAY_OF_MONTH, i);
-    //cal.set(Integer.parseInt(year), Integer.parseInt(month)-1,Integer.parseInt(day));
-    events.add(new EventDay(cal, DrawableUtils.getCircleDrawableWithText(getActivity(),appointmentCount.get(i-1))));
-    Log.d("dateslist",cal.toString());
-    Log.d("dates",cal.toString());
+        appointmentCount.add("21");
+        appointmentCount.add("25");
+        appointmentCount.add("22");
+        appointmentCount.add("30");
+        appointmentCount.add("12");
+        appointmentCount.add("14");
+        for (int i = 1; i <= 31; i++) {
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.DAY_OF_MONTH, i);
+            //cal.set(Integer.parseInt(year), Integer.parseInt(month)-1,Integer.parseInt(day));
+            events.add(new EventDay(cal, DrawableUtils.getCircleDrawableWithText(getActivity(), appointmentCount.get(i - 1))));
+            Log.d("dateslist", cal.toString());
 
-}
+
+        }
 
         calendarView.setEvents(events);
 
@@ -143,7 +145,7 @@ for(int i=1;i<=31;i++){
             @Override
             public void onDayClick(EventDay eventDay) {
                 Calendar selectedDate = eventDay.getCalendar();
-                Log.d("selectedDate",selectedDate.toString());
+                Log.d("selectedDate", selectedDate.toString());
             }
         });
 
@@ -231,12 +233,14 @@ for(int i=1;i<=31;i++){
 
         return view;
     }
+
     public static int getWidth(Context context) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         WindowManager windowmanager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         windowmanager.getDefaultDisplay().getMetrics(displayMetrics);
         return displayMetrics.widthPixels;
     }
+
     public static int getHeight(Context context) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         WindowManager windowmanager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);

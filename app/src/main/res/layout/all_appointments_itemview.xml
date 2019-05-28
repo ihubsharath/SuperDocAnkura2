@@ -135,7 +135,7 @@
                                     android:textSize="15sp" />
 
                                 <TextView
-                                    android:id="@+id/tv_status2"
+                                    android:id="@+id/tv_procedure2"
                                     android:layout_width="match_parent"
                                     android:layout_height="0dp"
                                     android:layout_marginTop="5dp"
@@ -155,8 +155,11 @@
                                 android:orientation="vertical">
 
                                 <TextView
+                                    android:id="@+id/tvStatus2"
                                     android:layout_width="30dp"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="15dp"
+                                    android:singleLine="true"
+                                    android:textSize="10sp"
                                     android:background="@color/colorPrimaryDark"
                                     android:gravity="center"
                                     android:text="IN"
@@ -385,7 +388,7 @@
                             android:textSize="15sp" />
 
                         <TextView
-                            android:id="@+id/tv_status"
+                            android:id="@+id/tv_procedure"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_marginTop="5dp"
@@ -403,11 +406,13 @@
                     android:gravity="center"
                     android:orientation="vertical">
                     <TextView
+                        android:id="@+id/tv_status"
                         android:layout_width="30dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="15sp"
                         android:text="OUT"
-                        android:paddingLeft="5dp"
                         android:textSize="10sp"
+                        android:paddingLeft="5dp"
+                        android:singleLine="true"
                         android:textColor="#ffffff"
                         android:background="#CBC7C7"/>
                 </LinearLayout>
@@ -415,6 +420,8 @@
             </android.support.v7.widget.CardView>
         </FrameLayout>
         <ImageView
+            android:visibility="gone"
+            android:id="@+id/isFirst"
             android:layout_width="35dp"
             android:layout_height="30dp"
             android:gravity="center"
@@ -423,13 +430,15 @@
             android:layout_marginLeft="-5dp"
             android:background="@drawable/ic_labelnew2" />
         <ImageView
-            android:layout_width="35dp"
-            android:layout_height="30dp"
+            android:visibility="gone"
+            android:id="@+id/isWalkin"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:gravity="center"
             android:layout_gravity="left"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="-5dp"
-            android:background="@drawable/ic_labelnew2" />
+            android:layout_marginTop="25dp"
+
+            android:src="@drawable/walkin" />
     </FrameLayout>
 
 

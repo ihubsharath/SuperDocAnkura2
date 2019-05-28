@@ -2,35 +2,35 @@ package com.example.superdoc_ankura.pojos.response;
 
 public class AllAppointmentsResponse {
 
-
     /**
-     * apptID : 3
-     * patientId : 2_2@JH1601522
-     * patientName : C.RAMANI
-     * bookeddate : 20/04/2019
-     * apptTime : 10:03
-     * apptStatus : Pending
-     * startConsultation : false
-     * checkedIn : false
-     * closeConsultation : false
+     * apptId : 5
+     * patientId : 2_2@JH1602663
+     * patientName : VENKATARAMANI
+     * apptDate : 2019-05-27
+     * apptTime : 19:14
+     * apptStatus : CheckedIn
+     * procedure : Consultation
+     * refferedType : null
+     * First : false
+     * first : false
      */
 
-    private int apptID;
+    private int apptId;
     private String patientId;
     private String patientName;
-    private String bookeddate;
+    private String apptDate;
     private String apptTime;
     private String apptStatus;
-    private boolean startConsultation;
-    private boolean checkedIn;
-    private boolean closeConsultation;
+    private String procedure;
+    private String refferedType;
+    private boolean First;
 
-    public int getApptID() {
-        return apptID;
+    public int getApptId() {
+        return apptId;
     }
 
-    public void setApptID(int apptID) {
-        this.apptID = apptID;
+    public void setApptId(int apptId) {
+        this.apptId = apptId;
     }
 
     public String getPatientId() {
@@ -49,12 +49,12 @@ public class AllAppointmentsResponse {
         this.patientName = patientName;
     }
 
-    public String getBookeddate() {
-        return bookeddate;
+    public String getApptDate() {
+        return apptDate;
     }
 
-    public void setBookeddate(String bookeddate) {
-        this.bookeddate = bookeddate;
+    public void setApptDate(String apptDate) {
+        this.apptDate = apptDate;
     }
 
     public String getApptTime() {
@@ -73,42 +73,42 @@ public class AllAppointmentsResponse {
         this.apptStatus = apptStatus;
     }
 
-    public boolean isStartConsultation() {
-        return startConsultation;
+    public String getProcedure() {
+        return procedure;
     }
 
-    public void setStartConsultation(boolean startConsultation) {
-        this.startConsultation = startConsultation;
+    public void setProcedure(String procedure) {
+        this.procedure = procedure;
     }
 
-    public boolean isCheckedIn() {
-        return checkedIn;
+    public String getRefferedType() {
+        return refferedType;
     }
 
-    public void setCheckedIn(boolean checkedIn) {
-        this.checkedIn = checkedIn;
+    public void setRefferedType(String refferedType) {
+        this.refferedType = refferedType;
     }
 
-    public boolean isCloseConsultation() {
-        return closeConsultation;
+    public boolean isFirst() {
+        return First;
     }
 
-    public void setCloseConsultation(boolean closeConsultation) {
-        this.closeConsultation = closeConsultation;
+    public void setFirst(boolean First) {
+        this.First = First;
     }
 
     @Override
     public String toString() {
         return "AllAppointmentsResponse{" +
-                "apptID=" + apptID +
+                "apptId=" + apptId +
                 ", patientId='" + patientId + '\'' +
                 ", patientName='" + patientName + '\'' +
-                ", bookeddate='" + bookeddate + '\'' +
+                ", apptDate='" + apptDate + '\'' +
                 ", apptTime='" + apptTime + '\'' +
                 ", apptStatus='" + apptStatus + '\'' +
-                ", startConsultation=" + startConsultation +
-                ", checkedIn=" + checkedIn +
-                ", closeConsultation=" + closeConsultation +
+                ", procedure='" + procedure + '\'' +
+                ", refferedType='" + refferedType + '\'' +
+                ", First=" + First +
                 '}';
     }
 }

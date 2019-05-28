@@ -1,5 +1,6 @@
 package com.example.superdoc_ankura.adapters;
 
+import android.graphics.Color;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -64,10 +65,44 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
     @Override
     public void onBindViewHolder(@NonNull final AllAppointmentsHolder holder, final int i) {
 
-
         holder.tvTime.setText(allAppointmentsResponses.get(i).getApptTime());
-        holder.tvPatientName.setText(allAppointmentsResponses.get(i).getPatientName() + "/" + allAppointmentsResponses.get(i).getApptID());
-        holder.tvApptStatus.setText(allAppointmentsResponses.get(i).getApptStatus());
+        holder.tvPatientName.setText(allAppointmentsResponses.get(i).getPatientName() + "/" + allAppointmentsResponses.get(i).getApptId());
+        holder.tvApptProcedure.setText(allAppointmentsResponses.get(i).getProcedure());
+
+
+
+        if (allAppointmentsResponses.get(i).getApptStatus().equalsIgnoreCase("Pending")){
+            holder.tvStatus.setText(allAppointmentsResponses.get(i).getApptStatus());
+        }else if (allAppointmentsResponses.get(i).getApptStatus().equalsIgnoreCase("Confirm")){
+            holder.tvStatus.setText(allAppointmentsResponses.get(i).getApptStatus());
+        }else if (allAppointmentsResponses.get(i).getApptStatus().equalsIgnoreCase("Reschedule")){
+            holder.tvStatus.setText(allAppointmentsResponses.get(i).getApptStatus());
+        }else if (allAppointmentsResponses.get(i).getApptStatus().equalsIgnoreCase("Cancel")){
+            holder.tvStatus.setText(allAppointmentsResponses.get(i).getApptStatus());
+        }else if (allAppointmentsResponses.get(i).getApptStatus().equalsIgnoreCase("Checkin")){
+            holder.tvStatus.setText(allAppointmentsResponses.get(i).getApptStatus());
+            holder.tvStatus.setBackgroundColor(Color.parseColor("#68D8D6"));
+        }else if (allAppointmentsResponses.get(i).getApptStatus().equalsIgnoreCase("CheckOut")){
+            holder.tvStatus.setText("OUT");
+            holder.tvStatus.setBackgroundColor(Color.parseColor("#CBC7C7"));
+        } else if (allAppointmentsResponses.get(i).getApptStatus().equalsIgnoreCase("NoShow")){
+            holder.tvStatus.setText(allAppointmentsResponses.get(i).getApptStatus());
+            holder.tvStatus.setBackgroundColor(Color.parseColor("#FF7C7C"));
+        }
+
+
+
+
+        if (allAppointmentsResponses.get(i).isFirst() == true) {
+            holder.isFirst.setVisibility(View.VISIBLE);
+        } else {
+            holder.isFirst.setVisibility(View.GONE);
+        }
+        if (allAppointmentsResponses.get(i).getRefferedType() != null && allAppointmentsResponses.get(i).getRefferedType().equalsIgnoreCase("Walkin")) {
+            holder.isWalkin.setVisibility(View.VISIBLE);
+        } else {
+            holder.isWalkin.setVisibility(View.GONE);
+        }
 //        holder.tvTime.setTypeface(allAppointmentsActivity.faceLight);
 //        holder.tvPatientName.setTypeface(allAppointmentsActivity.faceLight);
 //        holder.tvApptStatus.setTypeface(allAppointmentsActivity.faceLight);
@@ -84,7 +119,7 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
             public void onStartOpen(SwipeLayout layout) {
                 undo = false;
                 // allAppointmentsActivity.start = false;
-                appid = allAppointmentsResponses.get(holder.getAdapterPosition()).getApptID();
+                appid = allAppointmentsResponses.get(holder.getAdapterPosition()).getApptId();
                 //currentAppID = appid;
                 if (layout.getOpenStatus() == SwipeLayout.Status.Open) {
 
@@ -104,7 +139,7 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
                         //allAppointmentsActivity.showAlertDialog("START button clicked");
 
 
-                        appid = allAppointmentsResponses.get(holder.getAdapterPosition()).getApptID();
+                        appid = allAppointmentsResponses.get(holder.getAdapterPosition()).getApptId();
                         currentAppID = appid;
                         Log.d("appid-open", String.valueOf(appid));
 //starting consultaion
@@ -128,7 +163,27 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
                                                 try {
                                                     holder.tvTime2.setText(allAppointmentsResponses.get(holder.getAdapterPosition()).getApptTime());
                                                     holder.tvPatientName2.setText(allAppointmentsResponses.get(holder.getAdapterPosition()).getPatientName());
-                                                    holder.tvApptStatus2.setText(allAppointmentsResponses.get(holder.getAdapterPosition()).getApptStatus());
+                                                    holder.tvApptProcedure2.setText(allAppointmentsResponses.get(holder.getAdapterPosition()).getProcedure());
+
+                                                    if (allAppointmentsResponses.get(i).getApptStatus().equalsIgnoreCase("Pending")){
+                                                        holder.tvStatus2.setText(allAppointmentsResponses.get(i).getApptStatus());
+                                                    }else if (allAppointmentsResponses.get(i).getApptStatus().equalsIgnoreCase("Confirm")){
+                                                        holder.tvStatus2.setText(allAppointmentsResponses.get(i).getApptStatus());
+                                                    }else if (allAppointmentsResponses.get(i).getApptStatus().equalsIgnoreCase("Reschedule")){
+                                                        holder.tvStatus2.setText(allAppointmentsResponses.get(i).getApptStatus());
+                                                    }else if (allAppointmentsResponses.get(i).getApptStatus().equalsIgnoreCase("Cancel")){
+                                                        holder.tvStatus2.setText(allAppointmentsResponses.get(i).getApptStatus());
+                                                    }else if (allAppointmentsResponses.get(i).getApptStatus().equalsIgnoreCase("Checkin")){
+                                                        holder.tvStatus2.setText(allAppointmentsResponses.get(i).getApptStatus());
+                                                        holder.tvStatus2.setBackgroundColor(Color.parseColor("#68D8D6"));
+                                                    }else if (allAppointmentsResponses.get(i).getApptStatus().equalsIgnoreCase("CheckOut")){
+                                                        holder.tvStatus2.setText("OUT");
+                                                        holder.tvStatus2.setBackgroundColor(Color.parseColor("#CBC7C7"));
+                                                    } else if (allAppointmentsResponses.get(i).getApptStatus().equalsIgnoreCase("NoShow")){
+                                                        holder.tvStatus2.setText(allAppointmentsResponses.get(i).getApptStatus());
+                                                        holder.tvStatus2.setBackgroundColor(Color.parseColor("#FF7C7C"));
+                                                    }
+
                                                     startConsultation(holder, appid);
 
                                                 } catch (Exception e) {
@@ -210,10 +265,10 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
                     undo = false;
                     holder.swipeLayout.setSwipeEnabled(true);
                     if (holder.layout_timer.getVisibility() == View.VISIBLE) {
-                        stopChronometer(holder, allAppointmentsResponses.get(holder.getAdapterPosition()).getApptID());
+                        stopChronometer(holder, allAppointmentsResponses.get(holder.getAdapterPosition()).getApptId());
                     } else {
-                        resetChronometer(holder, allAppointmentsResponses.get(holder.getAdapterPosition()).getApptID());
-                        Log.d("appid-close", String.valueOf(allAppointmentsResponses.get(holder.getAdapterPosition()).getApptID()));
+                        resetChronometer(holder, allAppointmentsResponses.get(holder.getAdapterPosition()).getApptId());
+                        Log.d("appid-close", String.valueOf(allAppointmentsResponses.get(holder.getAdapterPosition()).getApptId()));
                     }
 
                     BaseActivity.getInstance().showToast("undo not clicked");
@@ -241,7 +296,7 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
         holder.checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                appid = allAppointmentsResponses.get(holder.getAdapterPosition()).getApptID();
+                appid = allAppointmentsResponses.get(holder.getAdapterPosition()).getApptId();
                 stopChronometer(holder, appid);
                 holder.swipeLayout2.close();
                 holder.swipeLayout.close();
@@ -252,7 +307,7 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
         holder.markFollowUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                allAppointmentsActivity.showToast("MARK FOLLOWUP"+allAppointmentsResponses.get(holder.getAdapterPosition()).getApptID());
+                allAppointmentsActivity.showToast("MARK FOLLOWUP" + allAppointmentsResponses.get(holder.getAdapterPosition()).getApptId());
             }
         });
 
@@ -267,13 +322,13 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
 //                allAppointmentsActivity.allAppointmentsAdapter.notifyDataSetChanged();
 
 
-                resetChronometer(holder, allAppointmentsResponses.get(holder.getAdapterPosition()).getApptID());
+                resetChronometer(holder, allAppointmentsResponses.get(holder.getAdapterPosition()).getApptId());
             }
         });
         holder.startConsult.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                appid = allAppointmentsResponses.get(holder.getAdapterPosition()).getApptID();
+                appid = allAppointmentsResponses.get(holder.getAdapterPosition()).getApptId();
 //                boolean value = allAppointmentsResponses.get(i).isStartConsultation();
 //                if (value == true) {
 //                    startConsult = 1;
@@ -287,14 +342,14 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
         holder.cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                appid = allAppointmentsResponses.get(holder.getAdapterPosition()).getApptID();
+                appid = allAppointmentsResponses.get(holder.getAdapterPosition()).getApptId();
                 cancelAppointment(holder, appid);
             }
         });
         holder.noshow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                appid = allAppointmentsResponses.get(holder.getAdapterPosition()).getApptID();
+                appid = allAppointmentsResponses.get(holder.getAdapterPosition()).getApptId();
                 boolean isShow = true;
                 noShowAppointment(appid, isShow, holder);
             }

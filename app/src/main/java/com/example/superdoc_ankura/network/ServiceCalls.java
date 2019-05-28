@@ -9,10 +9,12 @@ package com.example.superdoc_ankura.network;
 //import com.example.ihubtechnologies.superdocnew.pojos.response.CloseConsultantResponse;
 //import com.example.ihubtechnologies.superdocnew.pojos.response.ClosedAppointmentsResponse;
 //import com.example.ihubtechnologies.superdocnew.pojos.response.ConfirmedAppointmentsResponse;
+
 import com.example.superdoc_ankura.pojos.request.CloseConsultantRequest;
 import com.example.superdoc_ankura.pojos.request.LoginRequest;
 import com.example.superdoc_ankura.pojos.request.StartConsultantRequest;
 import com.example.superdoc_ankura.pojos.response.AllAppointmentsResponse;
+import com.example.superdoc_ankura.pojos.response.AllCountsResponse;
 import com.example.superdoc_ankura.pojos.response.CancelAppointmentResponse;
 import com.example.superdoc_ankura.pojos.response.CloseConsultantResponse;
 import com.example.superdoc_ankura.pojos.response.ConfirmedAppointmentsResponse;
@@ -47,7 +49,7 @@ import retrofit2.http.Query;
 
 public interface ServiceCalls {
 
-//
+    //
 //    @GET("loginWithMobile")
 //    Call<LoginResponse> doLogin(@Query("mobilenumber") String s);
 //
@@ -56,38 +58,35 @@ public interface ServiceCalls {
 //
     @GET("listOfSessions")
     Call<List<DoctorSessionResponse>> getDoctorSessions(@Query("doctorId") String doctorid);
-//
-//    @GET("listOfAllAppointments")
-//    Call<List<AllAppointmentsResponse>> getListOfAllAppointments(@Query("doctorId") String doctorId);
-//
+
+
     @POST("startConsultation")
     Call<StartConsultantResponse> doStartConsultant(@Body StartConsultantRequest startConsultantRequest);
-//
-    @GET("listOfAllConfirmedAppointments")
-    Call<List<ConfirmedAppointmentsResponse>> getListOfConfirmedAppointments(@Query("doctorId") String doctorId);
-//
+
+
+    @GET("listOfCheckinAppointmentsV2")
+    Call<List<ConfirmedAppointmentsResponse>> getListOfConfirmedAppointments(@Query("doctorId") String doctorid, @Query("sessionId") String sessionId);
+
+
     @POST("closeConsultation")
     Call<CloseConsultantResponse> doCloseConsultant(@Body CloseConsultantRequest closeConsultantRequest);
-//
-//
-//
-//
-//
-//    @GET("listOfAllClosedAppointments")
-//    Call<List<ClosedAppointmentsResponse>> getAllClosedAppointments(@Query("doctorId") String doctorId);
-//
-    @GET("listOfAllAppointments")
-    Call<List<AllAppointmentsResponse>> getAllAppointments(@Query("doctorId") String doctorid);
-//
+
+    @GET("listOfAllAppointmentsV2")
+    Call<List<AllAppointmentsResponse>> getAllAppointments(@Query("doctorId") String doctorid, @Query("sessionId") String sessionId);
+
+
     @GET("cancelAppointment")
     Call<CancelAppointmentResponse> cancelAppointment(@Query("apptId") int appid);
-//
-    @GET("getListOfCancelledAppointments")
-    Call<List<GetListOfCancelledAppointmentsResponse>> getListOfCancelledAppointments(@Query("doctorId") String doctorId);
-//
-    @GET("getListOfNoShowAppointments")
-    Call<List<GetListOfNoShowAppointmentsResponse>> getListOfNoShowAppointments(@Query("doctorId") String doctorid);
-//
+
+
+    @GET("listOfCancelAppointmentsV2")
+    Call<List<GetListOfCancelledAppointmentsResponse>> getListOfCancelledAppointments(@Query("doctorId") String doctorId, @Query("sessionId") String sessionId);
+
+
+    @GET("listOfNoShowAppointmentsV2")
+    Call<List<GetListOfNoShowAppointmentsResponse>> getListOfNoShowAppointments(@Query("doctorId") String doctorid, @Query("sessionId") String sessionId);
+
+
     @GET("noShowAppointment")
     Call<NoShowAppointmentsResponse> noShowAppointment(@Query("apptId") int appid, @Query("isShow") boolean isShow);
 
@@ -96,4 +95,8 @@ public interface ServiceCalls {
 
     @GET("listOfAppointmentsCountWithDatesV2")
     Call<ArrayList<ListOfTotalCountsWithDatesResponse>> getListOfTotalCountsWithDates(@Query("doctorId") String doctorid);
+
+
+    @GET("appointmentCountsV2")
+    Call<AllCountsResponse> getAllCounts(@Query("doctorId") String doctorid, @Query("sessionId") String sessionId);
 }
