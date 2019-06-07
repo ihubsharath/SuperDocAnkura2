@@ -71,11 +71,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
         <com.applandeo.materialcalendarview.CalendarView
-            android:id="@+id/calendarView"
+            android:id="@+id/calendarViewLeaveDays"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:forwardButtonSrc="@drawable/rightarrow"
             app:headerColor="#ffffff"
+            app:type="many_days_picker"
             app:headerLabelColor="#000000"
             app:previousButtonSrc="@drawable/ic_keyboard_arrow_left_black_24dp" />
     </LinearLayout>

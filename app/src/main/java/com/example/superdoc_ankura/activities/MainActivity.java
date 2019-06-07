@@ -38,6 +38,8 @@ public class MainActivity extends BaseActivity {
         Layout_bars = (LinearLayout) findViewById(R.id.layoutBars);
         Skip = findViewById(R.id.skip);
         Next = findViewById(R.id.next);
+        Next.setTypeface(faceRegular);
+        Skip.setTypeface(faceRegular);
         screens = new int[]{
                 R.layout.screen_one,
                 R.layout.screen_two,

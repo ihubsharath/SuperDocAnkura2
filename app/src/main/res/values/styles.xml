@@ -15,13 +15,16 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:typeface">serif</item>
 
+
     </style>
+
     <style name="AppTheme.NoActionBar.FullScreen2" parent="AppTheme.NoActionBar">
         <item name="windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:typeface">serif</item>
     </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowNoTitle">true</item>
 
@@ -38,11 +41,8 @@
     </style>
 
     <style name="CustomDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <!--buttons color-->
         <item name="colorAccent">@color/colorPrimaryDark</item>
-        <!--title and message color-->
         <item name="android:textColorPrimary">#000000</item>
-        <!--dialog background-->
         <item name="android:windowBackground">@drawable/background_dialog</item>
     </style>
 
@@ -55,4 +55,22 @@
         <item name="android:windowBackground">@drawable/background_mark_leave</item>
     </style>
 
+    <style name="alphabetTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">10sp</item>
+        <!--<item name="android:layout_gravity">center</item>-->
+        <!--<item name="android:onClick">quickScroll</item>-->
+    </style>
+
+
+    <style name="SCBSwitch" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">@color/colorPrimaryDark</item>
+
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">#DDDDDD</item>
+
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">#42221f1f</item>
+    </style>
 </resources>

@@ -1,28 +1,33 @@
 package com.example.superdoc_ankura.network;
 
 
-//import com.example.ihubtechnologies.superdocnew.pojos.request.CloseConsultantRequest;
-//import com.example.ihubtechnologies.superdocnew.pojos.request.OtpVerificationRequest;
-//import com.example.ihubtechnologies.superdocnew.pojos.request.StartConsultantRequest;
-//import com.example.ihubtechnologies.superdocnew.pojos.response.AllAppointmentsResponse;
-//import com.example.ihubtechnologies.superdocnew.pojos.response.CancelAppointmentResponse;
-//import com.example.ihubtechnologies.superdocnew.pojos.response.CloseConsultantResponse;
-//import com.example.ihubtechnologies.superdocnew.pojos.response.ClosedAppointmentsResponse;
-//import com.example.ihubtechnologies.superdocnew.pojos.response.ConfirmedAppointmentsResponse;
-
+import com.example.superdoc_ankura.pojos.request.BookDoctorAppointmentRequest;
 import com.example.superdoc_ankura.pojos.request.CloseConsultantRequest;
+import com.example.superdoc_ankura.pojos.request.DoctorDelayRequest;
+import com.example.superdoc_ankura.pojos.request.ListOfSessionsBySelectedDatesRequest;
 import com.example.superdoc_ankura.pojos.request.LoginRequest;
+import com.example.superdoc_ankura.pojos.request.MarkLeaveRequest;
 import com.example.superdoc_ankura.pojos.request.StartConsultantRequest;
 import com.example.superdoc_ankura.pojos.response.AllAppointmentsResponse;
 import com.example.superdoc_ankura.pojos.response.AllCountsResponse;
+import com.example.superdoc_ankura.pojos.response.BookDoctorAppointmentResponse;
 import com.example.superdoc_ankura.pojos.response.CancelAppointmentResponse;
 import com.example.superdoc_ankura.pojos.response.CloseConsultantResponse;
 import com.example.superdoc_ankura.pojos.response.ConfirmedAppointmentsResponse;
+import com.example.superdoc_ankura.pojos.response.DoctorDelayResponse;
+import com.example.superdoc_ankura.pojos.response.DoctorProcedures;
 import com.example.superdoc_ankura.pojos.response.DoctorSessionResponse;
+import com.example.superdoc_ankura.pojos.response.DoctorTimeSlotsResponse;
 import com.example.superdoc_ankura.pojos.response.GetListOfCancelledAppointmentsResponse;
 import com.example.superdoc_ankura.pojos.response.GetListOfNoShowAppointmentsResponse;
+import com.example.superdoc_ankura.pojos.response.GetPatientContactDetailsResponse;
+import com.example.superdoc_ankura.pojos.response.ListOfDoctorContactsResponse;
+import com.example.superdoc_ankura.pojos.response.ListOfSessionsBySelectedDatesResponse;
+import com.example.superdoc_ankura.pojos.response.ListOfSessionsUsingDateResponse;
 import com.example.superdoc_ankura.pojos.response.ListOfTotalCountsWithDatesResponse;
+import com.example.superdoc_ankura.pojos.response.ListOfTotalCountsWithDatesResponse2;
 import com.example.superdoc_ankura.pojos.response.LoginResponse;
+import com.example.superdoc_ankura.pojos.response.MarkLeaveResponse;
 import com.example.superdoc_ankura.pojos.response.NoShowAppointmentsResponse;
 import com.example.superdoc_ankura.pojos.response.StartConsultantResponse;
 //import com.example.ihubtechnologies.superdocnew.pojos.response.GetListOfCancelledAppointmentsResponse;
@@ -44,8 +49,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
-//import retrofit2.http.POST;
-//import retrofit2.http.Query;
+
 
 public interface ServiceCalls {
 
@@ -94,9 +98,36 @@ public interface ServiceCalls {
     Call<LoginResponse> doLogin(@Body LoginRequest loginRequest);
 
     @GET("listOfAppointmentsCountWithDatesV2")
-    Call<ArrayList<ListOfTotalCountsWithDatesResponse>> getListOfTotalCountsWithDates(@Query("doctorId") String doctorid);
+    Call<ArrayList<ListOfTotalCountsWithDatesResponse2>> getListOfTotalCountsWithDates(@Query("doctorId") String doctorid);
 
 
     @GET("appointmentCountsV2")
     Call<AllCountsResponse> getAllCounts(@Query("doctorId") String doctorid, @Query("sessionId") String sessionId);
+
+    @GET("listOfSessionsByDateV2")
+    Call<ArrayList<ListOfSessionsUsingDateResponse>> getListOfSessionsByDate(@Query("doctorId") String doctorid,@Query("date")  String selectedDate);
+
+    @POST("listOfSessionsBySelectedDatesV2")
+    Call<ArrayList<ListOfSessionsBySelectedDatesResponse>> getListOfSessionsBySelectedDates(@Body ListOfSessionsBySelectedDatesRequest listOfSessionsBySelectedDatesRequest);
+
+    @POST("markLeaveV2")
+    Call<MarkLeaveResponse> doMarkLeave(@Body MarkLeaveRequest markLeaveRequest);
+
+    @POST("delayAppointmentsV2")
+    Call<DoctorDelayResponse> doDoctorDelay(@Body DoctorDelayRequest doctorDelayRequest);
+
+    @GET("listOfDoctorTimesV2")
+    Call<ArrayList<DoctorTimeSlotsResponse>> getDoctorTimeSlots(@Query("doctorId") String doctorid,@Query("date") String date);
+
+    @GET("listOfDoctorProceduresV2")
+    Call<ArrayList<DoctorProcedures>> getDoctorProcedures();
+
+    @POST("bookDoctorAppointmentDoctorAppV2")
+    Call<BookDoctorAppointmentResponse> doBookDoctorAppointment(@Body BookDoctorAppointmentRequest bookDoctorAppointmentRequest);
+
+    @GET("listOfDoctorPatientContactV2")
+    Call<ArrayList<ListOfDoctorContactsResponse>> getListOfDoctorContacts(@Query("doctorId") String doctorid);
+
+    @GET("getDoctorPatientContactDetailV2")
+    Call<GetPatientContactDetailsResponse> getPatientContactDetails(@Query("doctorId") String doctorid,@Query("patientId") String patientId);
 }

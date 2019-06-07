@@ -16,82 +16,81 @@
         android:orientation="vertical">
 
 
+        <LinearLayout
+            android:id="@+id/layout_session"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@drawable/top"
+            android:orientation="horizontal"
+            android:transitionName="sessionTransition">
+
 
             <LinearLayout
-                android:id="@+id/layout_session"
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:background="@drawable/top"
-                android:orientation="horizontal"
-                android:transitionName="sessionTransition">
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.25"
+                android:gravity="center">
 
-
-                <LinearLayout
-                    android:layout_width="0dp"
+                <TextView
+                    android:id="@+id/tv_appointments_count"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.25"
-                    android:gravity="center">
-
-                    <TextView
-                        android:id="@+id/tv_appointments_count"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="0"
-                        android:textColor="#ffffff"
-                        android:textSize="50sp"
-                        android:transitionName="count"/>
-                </LinearLayout>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center"
-                    android:background="#ffffff" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5"
                     android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tv_hospital_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="5"
-                        android:gravity="center|bottom"
-                        android:text="Ankura Hospital"
-                        android:textColor="#ffffff"
-                        android:textSize="20sp"
-                        android:transitionName="hospital"/>
-
-                    <TextView
-                        android:id="@+id/tv_session_time"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="5"
-                        android:gravity="center|top"
-                        android:text="12:00 PM - 02:45 PM"
-                        android:textColor="#ffffff"
-                        android:transitionName="time"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.25"
-                    android:gravity="center"
-                    android:paddingBottom="10dp">
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/ic_search_white_24dp" />
-                </LinearLayout>
+                    android:text="0"
+                    android:textColor="#ffffff"
+                    android:textSize="30sp"
+                    android:transitionName="count" />
             </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:background="#ffffff" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_hospital_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="5"
+                    android:gravity="center|bottom"
+                    android:text="Ankura Hospital"
+                    android:textColor="#ffffff"
+                    android:textSize="20sp"
+                    android:transitionName="hospital" />
+
+                <TextView
+                    android:id="@+id/tv_session_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="5"
+                    android:gravity="center|top"
+                    android:text="12:00 PM - 02:45 PM"
+                    android:textColor="#ffffff"
+                    android:transitionName="time" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.25"
+                android:gravity="center"
+                android:paddingBottom="10dp">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_search_white_24dp" />
+            </LinearLayout>
+        </LinearLayout>
 
 
         <LinearLayout
@@ -124,6 +123,7 @@
 
                 <TextView
 
+                    android:id="@+id/textCheckIn"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
@@ -151,7 +151,7 @@
                     android:textColor="@color/colorPrimaryDark" />
 
                 <TextView
-
+                    android:id="@+id/textNoShow"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
@@ -179,6 +179,7 @@
                     android:textColor="@color/colorPrimaryDark" />
 
                 <TextView
+                    android:id="@+id/textCancel"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
@@ -206,7 +207,7 @@
                     android:textColor="@color/colorPrimaryDark" />
 
                 <TextView
-
+                    android:id="@+id/textAll"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"

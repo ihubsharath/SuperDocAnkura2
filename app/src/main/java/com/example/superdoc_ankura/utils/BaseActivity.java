@@ -16,7 +16,7 @@ import com.example.superdoc_ankura.network.ServiceGenaretor;
 
 public class BaseActivity extends AppCompatActivity {
     static  BaseActivity baseActivity;
-    public Typeface faceLight, faceRegular, faceBold, faceMedium;
+    public Typeface faceLight, faceRegular, faceBold, faceMedium, faceProximaRegular, faceProximaBold;
     public InternetStatus internetStatus;
     public ServiceCalls serviceCalls;
     public SessionManager sessionManager;
@@ -31,6 +31,10 @@ public class BaseActivity extends AppCompatActivity {
         faceRegular = Typeface.createFromAsset(getAssets(), "Montserrat-Regular.otf");
         faceBold = Typeface.createFromAsset(getAssets(), "Montserrat-Bold.otf");
         faceMedium = Typeface.createFromAsset(getAssets(), "Montserrat-Medium.otf");
+        faceProximaRegular = Typeface.createFromAsset(getAssets(),"ProximaNova-Regular.otf");
+        faceProximaBold = Typeface.createFromAsset(getAssets(),"Proxima Nova Bold.otf");
+
+
         internetStatus = new InternetStatus(BaseActivity.this);
         sessionManager = new SessionManager(BaseActivity.this);
         serviceCalls = ServiceGenaretor.createService(ServiceCalls.class);
@@ -58,7 +62,7 @@ public class BaseActivity extends AppCompatActivity {
         dialog = new ProgressDialog(BaseActivity.this,R.style.AlertDialogColor);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialog.setMessage(getResources().getString(R.string.loading_text));
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
         dialog.show();
     }
 

@@ -19,6 +19,7 @@
             android:padding="5dp">
 
             <TextView
+                android:id="@+id/appointmentsCount"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -60,13 +61,13 @@
                     android:layout_weight="2.5">
 
                     <TextView
-                        android:id="@+id/tv_item_date"
+                        android:id="@+id/tv_session_id"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="23"
+                        android:text="11"
                         android:textColor="#ffffff"
-                        android:textSize="50sp"
+                        android:textSize="30sp"
                         android:transitionName="count"/>
                 </LinearLayout>
 
@@ -83,6 +84,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="7.45"
                     android:orientation="vertical"
+                    android:paddingRight="20dp"
                     android:weightSum="10">
 
 
@@ -93,8 +95,9 @@
                         android:layout_weight="5"
                         android:gravity="center|bottom"
                         android:text="Ankura Hospital"
+                        android:singleLine="true"
                         android:textColor="#ffffff"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:transitionName="hospital"/>
 
                     <TextView
@@ -103,7 +106,9 @@
                         android:layout_height="0dp"
                         android:layout_marginTop="5dp"
                         android:layout_weight="5"
+                        android:singleLine="true"
                         android:gravity="center|top"
+                        android:textSize="16sp"
                         android:text="12:00 PM - 02:45 PM"
                         android:textColor="#ffffff"
                         android:transitionName="time"/>

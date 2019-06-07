@@ -37,7 +37,7 @@ public class CancelledAppointmentsAdapter extends RecyclerView.Adapter<Cancelled
     public void onBindViewHolder(@NonNull CancelledAppointmentsHolder holder, int i) {
 
        holder.time.setText(cancelledAppointmentsResponseList.get(i).getApptTime());
-       holder.patientName.setText(cancelledAppointmentsResponseList.get(i).getPatientName()+ "/" + cancelledAppointmentsResponseList.get(i).getApptID());
+       holder.patientName.setText(cancelledAppointmentsResponseList.get(i).getPatientName());
         holder.status.setText(cancelledAppointmentsResponseList.get(i).getApptStatus());
 
     }

@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 
 import com.example.superdoc_ankura.R;
+import com.example.superdoc_ankura.utils.BaseActivity;
 
 public class NoShowAppointmentsHolder extends RecyclerView.ViewHolder {
     public TextView time,patientName,status;
@@ -15,5 +16,9 @@ public class NoShowAppointmentsHolder extends RecyclerView.ViewHolder {
         time = itemView.findViewById(R.id.tv_time);
         patientName = itemView.findViewById(R.id.tv_patient_name);
         status = itemView.findViewById(R.id.tv_status);
+
+        time.setTypeface(BaseActivity.getInstance().faceLight);
+        patientName.setTypeface(BaseActivity.getInstance().faceRegular);
+        status.setTypeface(BaseActivity.getInstance().faceBold);
     }
 }

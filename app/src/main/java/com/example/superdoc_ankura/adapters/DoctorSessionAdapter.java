@@ -44,9 +44,10 @@ public class DoctorSessionAdapter extends RecyclerView.Adapter<DoctorSessionHold
 
     @Override
     public void onBindViewHolder(@NonNull final DoctorSessionHolder holder, final int i) {
-        holder.tvDate.setText(String.valueOf(doctorSessionResponses.get(i).getTodayAppointmentsCount()));
+        holder.tv_session_id.setText(String.valueOf(doctorSessionResponses.get(i).getDoctorSessionId()));
         holder.tvHospitalName.setText(doctorSessionResponses.get(i).getOrganizationName());
         holder.tvFromToTime.setText(doctorSessionResponses.get(i).getSessionTime());
+        holder.appointmentsCount.setText(String.valueOf(doctorSessionResponses.get(i).getTodayAppointmentsCount()));
 
         ViewCompat.setTransitionName(holder.cardView, doctorSessionResponses.get(i).getOrganizationName());
 

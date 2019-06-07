@@ -8,6 +8,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.superdoc_ankura.R;
 import com.example.superdoc_ankura.pojos.request.LoginRequest;
@@ -23,6 +24,7 @@ public class LoginActivity extends BaseActivity {
     Animation animation, bluetoothAnim;
     ImageView bluetooth;
     EditText emailid, password;
+    TextView textForgotPassword,textNeedHelp,textSuperDoc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,15 @@ public class LoginActivity extends BaseActivity {
         bluetooth = findViewById(R.id.bluetooth);
         emailid = findViewById(R.id.emailid);
         password = findViewById(R.id.password);
+        textForgotPassword = findViewById(R.id.forgotPassword);
+        textNeedHelp = findViewById(R.id.needHelp);
+        textSuperDoc = findViewById(R.id.superdoc);
+
+        emailid.setTypeface(faceLight);
+        password.setTypeface(faceLight);
+        textForgotPassword.setTypeface(faceLight);
+        textNeedHelp.setTypeface(faceLight);
+        textSuperDoc.setTypeface(faceLight);
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.slide_in_bottom_login);
@@ -67,10 +78,18 @@ public class LoginActivity extends BaseActivity {
                                 if (response.code() == 200) {
                                     LoginResponse loginResponse = response.body();
                                     sessionManager.setDOCTORID(loginResponse.getDoctorId());
+                                    sessionManager.setDOCTORNAME(loginResponse.getDoctorName());
+                                    for (String c:loginResponse.getDoctorSpeciality()){
+                                        sessionManager.setDOCTORSPECIALITIES(c);
+                                    }
+                                    sessionManager.setDOCTORSTUDIES(loginResponse.getDoctorstudies());
+
                                     Intent i = new Intent(LoginActivity.this, HomeActivity.class);
                                     startActivity(i);
-                                } else {
-                                    showAlertDialog("Error :" + "Login Failed" + "\n" + response.code());
+                                } else if (response.code()==800){
+                                    showToast("Please Enter Valid User Credentials");
+                                }else if (response.code()==204){
+                                    showToast("login failed");
                                 }
 
                             }

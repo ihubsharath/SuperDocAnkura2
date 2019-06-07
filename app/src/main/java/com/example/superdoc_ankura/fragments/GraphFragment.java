@@ -38,7 +38,7 @@ public class GraphFragment extends Fragment {
     private String[] xData = {"New", "Old"};
 
     TextView tvSummary, tvHospitalName, tvTime;
-
+    TextView tvAvgWaitTimeText, tvConsultationDurationText;
     TextView tvAvgWaitTime, tvConsultationDuration;
     TextView one, two, three, four;
     TextView tvAppts, tvWalkins, tvCancel, tvNoShow;
@@ -66,6 +66,12 @@ public class GraphFragment extends Fragment {
         tvWalkins = view.findViewById(R.id.tvWalkins);
         tvCancel = view.findViewById(R.id.tvCancel);
         tvNoShow = view.findViewById(R.id.tvNoshow);
+
+        tvAppts.setTypeface(BaseActivity.getInstance().faceRegular);
+        tvWalkins.setTypeface(BaseActivity.getInstance().faceRegular);
+        tvCancel.setTypeface(BaseActivity.getInstance().faceRegular);
+        tvNoShow.setTypeface(BaseActivity.getInstance().faceRegular);
+
         valueOne = view.findViewById(R.id.value_one);
         valueTwo = view.findViewById(R.id.value_two);
         valueThree = view.findViewById(R.id.value_three);
@@ -81,6 +87,13 @@ public class GraphFragment extends Fragment {
 
         tvAvgWaitTime = view.findViewById(R.id.tv_avg_wait_time_value);
         tvConsultationDuration = view.findViewById(R.id.tv_consultaion_duration_value);
+        tvAvgWaitTimeText = view.findViewById(R.id.tv_avg_wait_time_text);
+        tvConsultationDurationText = view.findViewById(R.id.tv_consultaion_duration_text);
+
+        tvConsultationDuration.setTypeface(BaseActivity.getInstance().faceBold);
+        tvAvgWaitTime.setTypeface(BaseActivity.getInstance().faceBold);
+        tvAvgWaitTimeText.setTypeface(BaseActivity.getInstance().faceRegular);
+        tvConsultationDurationText.setTypeface(BaseActivity.getInstance().faceRegular);
 
         tvAvgWaitTime.setTypeface(((BaseActivity) getActivity()).faceBold);
         tvConsultationDuration.setTypeface(((BaseActivity) getActivity()).faceBold);
@@ -221,8 +234,8 @@ public class GraphFragment extends Fragment {
 
 
 
-                }else {
-                    BaseActivity.getInstance().showAlertDialog("Error:"+ response.code());
+                }else if (response.code()==204){
+                    BaseActivity.getInstance().showToast("failed");
                 }
 
             }

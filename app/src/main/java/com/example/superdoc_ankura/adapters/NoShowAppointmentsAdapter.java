@@ -35,7 +35,7 @@ public class NoShowAppointmentsAdapter extends RecyclerView.Adapter<NoShowAppoin
     @Override
     public void onBindViewHolder(@NonNull NoShowAppointmentsHolder holder, int i) {
         holder.time.setText(noShowAppointmentsResponseList.get(i).getApptTime());
-        holder.patientName.setText(noShowAppointmentsResponseList.get(i).getPatientName() + "/" + noShowAppointmentsResponseList.get(i).getApptID());
+        holder.patientName.setText(noShowAppointmentsResponseList.get(i).getPatientName());
         holder.status.setText(noShowAppointmentsResponseList.get(i).getApptStatus());
     }
 

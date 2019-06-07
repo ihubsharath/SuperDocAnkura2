@@ -47,10 +47,7 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
     public AllAppointmentsAdapter(AllAppointmentsActivity allAppointmentsActivity, List<AllAppointmentsResponse> allAppointmentsResponses) {
         this.allAppointmentsActivity = allAppointmentsActivity;
         this.allAppointmentsResponses = allAppointmentsResponses;
-
-
     }
-
 
     @NonNull
     @Override
@@ -66,10 +63,8 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
     public void onBindViewHolder(@NonNull final AllAppointmentsHolder holder, final int i) {
 
         holder.tvTime.setText(allAppointmentsResponses.get(i).getApptTime());
-        holder.tvPatientName.setText(allAppointmentsResponses.get(i).getPatientName() + "/" + allAppointmentsResponses.get(i).getApptId());
+        holder.tvPatientName.setText(allAppointmentsResponses.get(i).getPatientName());
         holder.tvApptProcedure.setText(allAppointmentsResponses.get(i).getProcedure());
-
-
 
         if (allAppointmentsResponses.get(i).getApptStatus().equalsIgnoreCase("Pending")){
             holder.tvStatus.setText(allAppointmentsResponses.get(i).getApptStatus());
@@ -79,6 +74,7 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
             holder.tvStatus.setText(allAppointmentsResponses.get(i).getApptStatus());
         }else if (allAppointmentsResponses.get(i).getApptStatus().equalsIgnoreCase("Cancel")){
             holder.tvStatus.setText(allAppointmentsResponses.get(i).getApptStatus());
+            holder.tvStatus.setBackgroundColor(Color.parseColor("#FF7C7C"));
         }else if (allAppointmentsResponses.get(i).getApptStatus().equalsIgnoreCase("Checkin")){
             holder.tvStatus.setText(allAppointmentsResponses.get(i).getApptStatus());
             holder.tvStatus.setBackgroundColor(Color.parseColor("#68D8D6"));
@@ -89,8 +85,6 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
             holder.tvStatus.setText(allAppointmentsResponses.get(i).getApptStatus());
             holder.tvStatus.setBackgroundColor(Color.parseColor("#FF7C7C"));
         }
-
-
 
 
         if (allAppointmentsResponses.get(i).isFirst() == true) {
@@ -173,10 +167,11 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
                                                         holder.tvStatus2.setText(allAppointmentsResponses.get(i).getApptStatus());
                                                     }else if (allAppointmentsResponses.get(i).getApptStatus().equalsIgnoreCase("Cancel")){
                                                         holder.tvStatus2.setText(allAppointmentsResponses.get(i).getApptStatus());
+                                                        holder.tvStatus2.setBackgroundColor(Color.parseColor("#FF7C7C"));
                                                     }else if (allAppointmentsResponses.get(i).getApptStatus().equalsIgnoreCase("Checkin")){
                                                         holder.tvStatus2.setText(allAppointmentsResponses.get(i).getApptStatus());
                                                         holder.tvStatus2.setBackgroundColor(Color.parseColor("#68D8D6"));
-                                                    }else if (allAppointmentsResponses.get(i).getApptStatus().equalsIgnoreCase("CheckOut")){
+                                                    }else if (allAppointmentsResponses.get(i).getApptStatus().equalsIgnoreCase("Checkout")){
                                                         holder.tvStatus2.setText("OUT");
                                                         holder.tvStatus2.setBackgroundColor(Color.parseColor("#CBC7C7"));
                                                     } else if (allAppointmentsResponses.get(i).getApptStatus().equalsIgnoreCase("NoShow")){
@@ -243,7 +238,7 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
 
                     } else {
                         allAppointmentsActivity.start = false;
-                        allAppointmentsActivity.showAlertDialog("please enable START button");
+                        allAppointmentsActivity.showToast("please enable START button");
                         layout.close();
                     }
                 }
@@ -372,15 +367,14 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
             @Override
             public void onResponse(Call<NoShowAppointmentsResponse> call, Response<NoShowAppointmentsResponse> response) {
                 if (response.code() == 200) {
-                    BaseActivity.getInstance().showAlertDialog(response.body().getMsg());
+                    BaseActivity.getInstance().showToast(response.body().getMsg());
                     holder.swipeLayout.close();
 
-                    allAppointmentsActivity.getlistOfCancelledAppointmentsSize();
-                    allAppointmentsActivity.getlistOfNoShowAppointmentsSize();
-                    allAppointmentsActivity.getlistOfConfirmedAppointmentsSize();
-                    allAppointmentsActivity.getAllAppointmentsSize();
-                } else {
-                    BaseActivity.getInstance().showAlertDialog("Error :" + response.code());
+                    allAppointmentsActivity.getAppointmentsCount();
+                    allAppointmentsActivity.getAllAppointments();
+
+                } else if (response.code()==204){
+                    BaseActivity.getInstance().showToast("failed");
                 }
             }
 
@@ -398,15 +392,13 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
             @Override
             public void onResponse(Call<CancelAppointmentResponse> call, Response<CancelAppointmentResponse> response) {
                 if (response.code() == 200) {
-                    BaseActivity.getInstance().showAlertDialog(response.body().getMsg());
+                    BaseActivity.getInstance().showToast(response.body().getMsg());
                     holder.swipeLayout.close();
 
-                    allAppointmentsActivity.getlistOfCancelledAppointmentsSize();
-                    allAppointmentsActivity.getlistOfNoShowAppointmentsSize();
-                    allAppointmentsActivity.getlistOfConfirmedAppointmentsSize();
-                    allAppointmentsActivity.getAllAppointmentsSize();
-                } else {
-                    BaseActivity.getInstance().showAlertDialog("Error :" + response.code());
+                    allAppointmentsActivity.getAppointmentsCount();
+                    allAppointmentsActivity.getAllAppointments();
+                } else if (response.code()==204){
+                    BaseActivity.getInstance().showToast("Appointment not cancelled");
                 }
             }
 
@@ -424,7 +416,7 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
             holder.chronometer.stop();
             holder.pauseOffSet = SystemClock.elapsedRealtime() - holder.chronometer.getBase();
             holder.running = false;
-            BaseActivity.getInstance().showToast("chronometer-stopped" + "\n" + "consultation closed successfully");
+            BaseActivity.getInstance().showToast("chronometer-stopped");
             int elapsedMillis = (int) (SystemClock.elapsedRealtime() - holder.chronometer.getBase());
             String elapsedTime = holder.chronometer.getText().toString();
             Log.d("elapsedMillis1", String.valueOf(elapsedMillis));
@@ -483,8 +475,8 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
 
                     holder.swipeLayout.setSwipeEnabled(false);
 
-                } else {
-                    BaseActivity.getInstance().showAlertDialog("Error :" + response.code());
+                } else if (response.code()==204){
+                    BaseActivity.getInstance().showToast("Consultation not started");
                 }
             }
 
@@ -512,16 +504,13 @@ public class AllAppointmentsAdapter extends RecyclerSwipeAdapter<AllAppointments
                 if (response.code() == 200) {
                     CloseConsultantResponse closeConsultantResponse = response.body();
                     holder.swipeLayout.close();
-                    BaseActivity.getInstance().showToast(closeConsultantResponse.getMsg() + "\n" + "time :" + elapsedTime);
+                    BaseActivity.getInstance().showToast("consultation closed successfully");
                     allAppointmentsActivity.getAllAppointments();
 
-                    allAppointmentsActivity.getlistOfCancelledAppointmentsSize();
-                    allAppointmentsActivity.getlistOfNoShowAppointmentsSize();
-                    allAppointmentsActivity.getlistOfConfirmedAppointmentsSize();
-                    allAppointmentsActivity.getAllAppointmentsSize();
+                    allAppointmentsActivity.getAppointmentsCount();
 
-                } else {
-                    BaseActivity.getInstance().showAlertDialog("Error :" + response.code());
+                } else if (response.code()==204){
+                    BaseActivity.getInstance().showToast("Consultation not closed");
                 }
             }
 
