@@ -11,8 +11,7 @@
             android:id="@+id/id_card_item1"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="8dp"
             app:cardBackgroundColor="#14BBD3"
             app:cardCornerRadius="10dp"
             android:transitionName="sessionTransition">

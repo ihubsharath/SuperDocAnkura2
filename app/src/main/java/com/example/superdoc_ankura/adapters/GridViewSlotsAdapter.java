@@ -51,7 +51,7 @@ public class GridViewSlotsAdapter extends BaseAdapter {
         LinearLayout layoutSlot = convertView.findViewById(R.id.layout_slot);
         tvSlot.setText(doctorTimeSlotsResponses.get(position).getTimeSlot());
 
-        if (doctorTimeSlotsResponses.get(position).isBooked() == true) {
+        if (doctorTimeSlotsResponses.get(position).isBooked() == false) {
             tvSlot.setTextColor(Color.parseColor("#14BBD3"));
             tvSlot.setEnabled(true);
             tvSlot.setOnClickListener(new View.OnClickListener() {

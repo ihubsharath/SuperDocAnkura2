@@ -8,11 +8,9 @@
     <color name="colorPrimaryDark">#00BCD8</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="red">#F44336</color>
-    <color name="green">#5BFC38</color>
     <color name="pink">#FF7C7C</color>
     <color name="white">#FFFFFF</color>
-
+    <color name="grey">#CBC7C7</color>
 
 
     <array name="dot_on_page_not_active">
@@ -26,9 +24,5 @@
         <item>#00BCD4</item>
         <item>#00BCD4</item>
         <item>#00BCD4</item>
-    </array>
-    <array name="colors">
-        <item>#317BA9</item>
-        <item>#14BBD3</item>
     </array>
 </resources>

@@ -1,13 +1,23 @@
 package com.example.superdoc_ankura.activities;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.superdoc_ankura.R;
 import com.example.superdoc_ankura.adapters.PatientDetailsProceduresAdapter;
@@ -22,6 +32,7 @@ import retrofit2.Response;
 
 public class PatientDetailsActivity extends BaseActivity {
     ListView listView;
+    ImageView callToPatientMobile;
     TextView textPatientDetails;
     TextView tvAppointment, tvPersonal;
     TextView patientName, visitingSince, last90Days;
@@ -36,6 +47,7 @@ public class PatientDetailsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_details);
+        isPermissionGranted();
         patientId = getIntent().getExtras().getString("patientid");
         listView = findViewById(R.id.listview);
         tvAppointment = findViewById(R.id.tv_appointment);
@@ -44,6 +56,7 @@ public class PatientDetailsActivity extends BaseActivity {
         visitingSince = findViewById(R.id.textVisitingSince);
         last90Days = findViewById(R.id.textLast90Days);
         textPatientDetails = findViewById(R.id.textPatientDetails);
+        callToPatientMobile = findViewById(R.id.ivCallToPatientMobile);
 
 
         patientName.setTypeface(faceLight);
@@ -123,6 +136,20 @@ public class PatientDetailsActivity extends BaseActivity {
             }
         });
 
+        callToPatientMobile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                    Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                    callIntent.setData(Uri.parse("tel:"+appointmentsPersonalBean.getPhoneNumber()));
+                    startActivity(callIntent);
+
+
+
+            }
+        });
+
         tvAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,5 +175,33 @@ public class PatientDetailsActivity extends BaseActivity {
                 }
             }
         });
+    }
+    private boolean isPermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
+                requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, 111);
+                return false;
+            }
+        }
+        else {
+            return true;
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 111: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(PatientDetailsActivity.this, "Permission granted", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(PatientDetailsActivity.this, "Permission denied", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
     }
 }

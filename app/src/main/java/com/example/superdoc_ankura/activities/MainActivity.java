@@ -3,6 +3,7 @@ package com.example.superdoc_ankura.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -52,6 +55,29 @@ public class MainActivity extends BaseActivity {
             launchMain();
             finish();
         }
+
+        //vp.setPageTransformer(true, new DepthPageTransformer());
+        vp.setPageTransformer(false, new ViewPager.PageTransformer() {
+            @Override
+            public void transformPage(@NonNull View page, float position) {
+                //view.setRotationY(position * -30);
+
+                int pageWidth = page.getWidth();
+                float pageWidthTimesPosition = pageWidth * position;
+                float absPosition = Math.abs(position);
+               final View image1, image2;
+                image1 = page.findViewById(R.id.screenoneimage);
+                image2 = page.findViewById(R.id.screenoneimage2);
+
+                image1.setAlpha(1.0f - absPosition);
+                image1.setTranslationX(pageWidthTimesPosition / 2f);
+                image2.setAlpha(1.0f - absPosition);
+                image2.setTranslationX(pageWidthTimesPosition / 1f);
+
+            }
+        });
+
+
         ColoredBars(0);
         Next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,10 +153,10 @@ public class MainActivity extends BaseActivity {
 
     private void launchMain() {
         preferenceManager.setFirstTimeLaunch(false);
-        if (sessionManager.getDOCTORID()==null){
+        if (sessionManager.getDOCTORID() == null) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
-        }else {
+        } else {
             Intent i = new Intent(MainActivity.this, HomeActivity.class);
             startActivity(i);
             finish();
@@ -145,10 +171,10 @@ public class MainActivity extends BaseActivity {
             ColoredBars(position);
             if (position == screens.length - 1) {
                 Next.setText("Get Started");
-                Skip.setVisibility(View.GONE);
+                //Skip.setVisibility(View.GONE);
             } else {
                 Next.setText("Next");
-                Skip.setVisibility(View.VISIBLE);
+                //Skip.setVisibility(View.VISIBLE);
             }
         }
 
@@ -173,6 +199,7 @@ public class MainActivity extends BaseActivity {
         public Object instantiateItem(ViewGroup container, int position) {
             inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(screens[position], container, false);
+
             container.addView(view);
             return view;
         }

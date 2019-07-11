@@ -1,7 +1,9 @@
 package com.example.superdoc_ankura.fragments;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,6 +22,7 @@ import com.example.superdoc_ankura.activities.NotificationActivity;
 import com.example.superdoc_ankura.adapters.DoctorSessionAdapter;
 import com.example.superdoc_ankura.pojos.response.DoctorSessionResponse;
 import com.example.superdoc_ankura.utils.BaseActivity;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.List;
 
@@ -31,15 +34,19 @@ public class DashboardFragment extends Fragment {
     RecyclerView rview;
     TextView noDataFound;
     ImageView notification;
+    ImageView editProfile;
     DoctorSessionAdapter doctorSessionAdapter;
     int doctorSessionResponsesSize;
     TextView doctorName, doctorSpeciality, doctorStudies;
+    ShimmerFrameLayout mShimmerViewContainer;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dashboard_fragment, container, false);
         rview = view.findViewById(R.id.rview);
+        mShimmerViewContainer = (ShimmerFrameLayout) view.findViewById(R.id.shimmer_view_container);
+
         noDataFound = view.findViewById(R.id.noDataFound);
         noDataFound.setTypeface(BaseActivity.getInstance().faceProximaRegular);
         notification = view.findViewById(R.id.notification);
@@ -64,20 +71,32 @@ public class DashboardFragment extends Fragment {
         rview.setLayoutManager(linearLayoutManager);
         rview.setHasFixedSize(true);
         getDoctorSessions();
+
+
+        editProfile = view.findViewById(R.id.editProfile);
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog dialog;
+                LayoutInflater inflater = (LayoutInflater) getLayoutInflater();
+                View customView = inflater.inflate(R.layout.activity_profile_top_to_bottom_animation, null);
+
+                dialog = new Dialog(getActivity(),R.style.AppTheme_NoActionBar_FullScreen2);
+                dialog.setContentView(customView);
+                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimationProfile;
+
+                dialog.show();
+            }
+        });
         return view;
     }
 
     private void getDoctorSessions() {
+        mShimmerViewContainer.startShimmerAnimation();
         Call<List<DoctorSessionResponse>> call = ((BaseActivity) getActivity()).serviceCalls.getDoctorSessions(((BaseActivity) getActivity()).sessionManager.getDOCTORID());
-        ((BaseActivity) getActivity()).showDialog();
         call.enqueue(new Callback<List<DoctorSessionResponse>>() {
             @Override
             public void onResponse(Call<List<DoctorSessionResponse>> call, Response<List<DoctorSessionResponse>> response) {
-                try {
-                    ((BaseActivity) getActivity()).closeDialog();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
 
                 if (response.code() == 200) {
                     List<DoctorSessionResponse> doctorSessionResponses = response.body();
@@ -88,6 +107,13 @@ public class DashboardFragment extends Fragment {
                         noDataFound.setVisibility(View.VISIBLE);
                         rview.setVisibility(View.GONE);
                     } else {
+                        final Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mShimmerViewContainer.stopShimmerAnimation();
+                            }
+                        }, 500);
                         noDataFound.setVisibility(View.GONE);
                         rview.setVisibility(View.VISIBLE);
                         doctorSessionAdapter = new DoctorSessionAdapter(getActivity(), doctorSessionResponses);
@@ -106,7 +132,7 @@ public class DashboardFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<DoctorSessionResponse>> call, Throwable t) {
-                ((BaseActivity) getActivity()).closeDialog();
+                mShimmerViewContainer.stopShimmerAnimation();
                 ((BaseActivity) getActivity()).showAlertDialog(t.getMessage());
             }
         });

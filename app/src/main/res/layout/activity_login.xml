@@ -4,40 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_gradient"
+    android:background="@drawable/login_background"
     android:gravity="bottom"
     android:orientation="vertical"
     tools:context=".activities.LoginActivity">
 
-    <TextView
-        android:id="@+id/superdoc"
-        android:layout_width="match_parent"
+    <ImageView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Super Doc"
-        android:textColor="#ffffff"
-        android:textSize="40sp" />
+        android:layout_gravity="center"
+        android:src="@drawable/super_doc"/>
 
     <ImageView
         android:id="@+id/bluetooth"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="30dp"
-        android:src="@drawable/ic_bluetooth_24dp" />
+        android:src="@drawable/bluetooth"
+        android:layout_margin="30dp"/>
 
     <LinearLayout
         android:id="@+id/ll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#ffffff"
+        android:layout_height="@dimen/_250sdp"
+        android:background="@drawable/ic_login_back"
         android:orientation="vertical"
+        android:gravity="bottom"
         android:paddingBottom="20dp">
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:src="@drawable/curve" />
+
         <EditText
             android:id="@+id/emailid"
             android:layout_width="match_parent"
@@ -47,7 +41,7 @@
             android:layout_marginRight="50dp"
             android:background="@drawable/et_background"
             android:gravity="center"
-            android:inputType="text"
+            android:inputType="textEmailAddress"
             android:hint="Enter Email Id"
             android:textColor="#000000"
             android:textColorHint="#B8B8B8" />
@@ -83,7 +77,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ic_keyboard_arrow_right_black_24dp_2" />
+                    android:src="@drawable/login_button" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
 

@@ -31,7 +31,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/doc_profile" />
+                        android:src="@drawable/doctor_profile" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>
@@ -59,9 +59,9 @@
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_weight="2"
-                    android:layout_height="20dp"
+                    android:layout_height="@dimen/_10sdp"
                     android:gravity="right"
-                    android:src="@drawable/ic_edit_white_24dp"/>
+                    android:src="@drawable/edit"/>
             </LinearLayout>
 
             <View
@@ -97,9 +97,9 @@
 
             <ImageView
                 android:id="@+id/notification"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_notifications_white_24dp" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/notification_icon" />
         </LinearLayout>
     </LinearLayout>
 
@@ -107,42 +107,63 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="right">
+<LinearLayout
+    android:id="@+id/imageMarkLeave"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="0dp"
+    android:gravity="center"
+    android:orientation="vertical">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/mark_leave_calendar" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/mark_leave_text"
+        android:padding="5dp"/>
+</LinearLayout>
 
-        <ImageView
-            android:id="@+id/imageMarkLeave"
-            android:layout_width="80dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="20dp"
-            android:src="@drawable/markleave" />
     </LinearLayout>
 <ScrollView
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_view_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
         <com.applandeo.materialcalendarview.CalendarView
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp"
+            android:layout_height="wrap_content"
+            android:theme="@style/CalendarWidgetHeader"
             app:forwardButtonSrc="@drawable/rightarrow"
             app:headerColor="#ffffff"
+            android:fitsSystemWindows="true"
+            android:scaleY="0.9"
+            android:scaleX="0.9"
             app:headerLabelColor="#000000"
             app:type="one_day_picker"
             app:eventsEnabled="true"
-            app:previousButtonSrc="@drawable/ic_keyboard_arrow_left_black_24dp" />
+            app:previousButtonSrc="@drawable/ic_keyboard_arrow_left_blue_24dp" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"/>
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
 
     </LinearLayout>
-
 </ScrollView>
+
     <!--<LinearLayout-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="0dp"-->

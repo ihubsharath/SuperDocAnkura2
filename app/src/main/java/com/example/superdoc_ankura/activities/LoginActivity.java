@@ -24,7 +24,7 @@ public class LoginActivity extends BaseActivity {
     Animation animation, bluetoothAnim;
     ImageView bluetooth;
     EditText emailid, password;
-    TextView textForgotPassword,textNeedHelp,textSuperDoc;
+    TextView textForgotPassword,textNeedHelp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +37,13 @@ public class LoginActivity extends BaseActivity {
         password = findViewById(R.id.password);
         textForgotPassword = findViewById(R.id.forgotPassword);
         textNeedHelp = findViewById(R.id.needHelp);
-        textSuperDoc = findViewById(R.id.superdoc);
+
 
         emailid.setTypeface(faceLight);
         password.setTypeface(faceLight);
         textForgotPassword.setTypeface(faceLight);
         textNeedHelp.setTypeface(faceLight);
-        textSuperDoc.setTypeface(faceLight);
+
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.slide_in_bottom_login);

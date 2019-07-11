@@ -10,18 +10,14 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.example.superdoc_ankura.R;
 import com.example.superdoc_ankura.fragments.CalendarFragment;
 import com.example.superdoc_ankura.fragments.ContactsFragment;
 import com.example.superdoc_ankura.fragments.DashboardFragment;
 import com.example.superdoc_ankura.fragments.GraphFragment;
-import com.example.superdoc_ankura.fragments.ProfileFragment;
+import com.example.superdoc_ankura.fragments.SettingsFragment;
 import com.example.superdoc_ankura.utils.BaseActivity;
 
 public class HomeActivity extends BaseActivity {
@@ -61,8 +57,8 @@ LinearLayout graphLayout;
                 ft.replace(R.id.framelayout, new GraphFragment());
                 ft.addToBackStack(null);
                 ft.commitAllowingStateLoss();
-
                 navView.getMenu().getItem(0).setCheckable(false);
+                AllAppointmentsActivity.getInstance().stop = false;
             }
 //            else {
 //                AllAppointmentsActivity.getInstance().stop = false;
@@ -98,7 +94,7 @@ LinearLayout graphLayout;
                     break;
                 case R.id.navigation_profile:
                     item.setCheckable(true);
-                    fragment = new ProfileFragment();
+                    fragment = new SettingsFragment();
                     break;
             }
             return loadFragment(fragment);
@@ -131,46 +127,46 @@ LinearLayout graphLayout;
         if (mBottomNavigationView.getSelectedItemId() == R.id.navigation_dashboard)
         {
             //super.onBackPressed();
-//            new AlertDialog.Builder(this,R.style.CustomDialogTheme)
-//                    .setIcon(R.mipmap.ic_launcher_round)
-//                    .setTitle("Alert!")
-//                    .setMessage("Are you sure want to exit?")
-//                    .setNegativeButton("No", null)
-//                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//
-//                        public void onClick(DialogInterface arg0, int arg1) {
-//                            finish();
-//                            moveTaskToBack(true);
-//                        }
-//                    }).create().show();
-
-            TextView title = new TextView(this);
-            title.setText("Alert!");
-            title.setPadding(50,50,0,0);
-            title.setTypeface(faceProximaBold);
-            AlertDialog dialog = new AlertDialog.Builder(this,R.style.CustomDialogTheme)
-                    .setMessage("Are you sure want to exit?")
+            new AlertDialog.Builder(this,R.style.CustomDialogTheme)
                     .setIcon(R.mipmap.ic_launcher_round)
-                    .setCustomTitle(title)
-                    .setCancelable(true)
+                    .setTitle("Alert!")
+                    .setMessage("Are you sure want to exit?")
+                    .setNegativeButton("No", null)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+
+                        public void onClick(DialogInterface arg0, int arg1) {
                             finish();
                             moveTaskToBack(true);
                         }
-
-                    })
-                    .setNegativeButton("No", null).show();
-
-            TextView message = (TextView) dialog.findViewById(android.R.id.message);
-            message.setTypeface(faceRegular);
-
-            Button btn1 = (Button) dialog.findViewById(android.R.id.button1);
-            btn1.setTypeface(faceMedium);
-
-            Button btn2 = (Button) dialog.findViewById(android.R.id.button2);
-            btn2.setTypeface(faceMedium);
+                    }).create().show();
+//
+//            TextView title = new TextView(this);
+//            title.setText("Alert!");
+//            title.setPadding(50,50,0,0);
+//            title.setTypeface(faceProximaBold);
+//            AlertDialog dialog = new AlertDialog.Builder(this,R.style.CustomDialogTheme)
+//                    .setMessage("Are you sure want to exit?")
+//                    .setIcon(R.mipmap.ic_launcher_round)
+//                    .setCustomTitle(title)
+//                    .setCancelable(true)
+//                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            finish();
+//                            moveTaskToBack(true);
+//                        }
+//
+//                    })
+//                    .setNegativeButton("No", null).show();
+//
+//            TextView message = (TextView) dialog.findViewById(android.R.id.message);
+//            message.setTypeface(faceRegular);
+//
+//            Button btn1 = (Button) dialog.findViewById(android.R.id.button1);
+//            btn1.setTypeface(faceMedium);
+//
+//            Button btn2 = (Button) dialog.findViewById(android.R.id.button2);
+//            btn2.setTypeface(faceMedium);
 
 
         }

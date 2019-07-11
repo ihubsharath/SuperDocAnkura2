@@ -2,13 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:gravity="top"
+    android:gravity="center"
     android:orientation="vertical">
+    <!--<ImageView-->
+        <!--android:id="@+id/ivCloseDialog"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:src="@drawable/ic_close_black_24dp"-->
+        <!--android:layout_gravity="right"-->
+        <!--android:layout_marginRight="10dp"-->
+        <!--android:layout_marginTop="10dp"/>-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -16,7 +23,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2.5"
-            android:src="@drawable/ic_keyboard_arrow_left_black_24dp" />
+            android:src="@drawable/ic_keyboard_arrow_left_blue_24dp" />
 
         <TextView
             android:id="@+id/tv_date"
@@ -31,7 +38,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2.5"
-            android:src="@drawable/ic_keyboard_arrow_right_black_24dp" />
+            android:src="@drawable/ic_keyboard_arrow_right_blue_24dp" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,7 +52,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:orientation="horizontal">
 
             <TextView
@@ -107,7 +114,15 @@
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold" />
         </LinearLayout>
-
+        <TextView
+            android:id="@+id/noDataFound"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:gravity="center"
+            android:text="No Slots Found"
+            android:layout_below="@+id/top"
+            android:visibility="gone"/>
         <GridView
             android:id="@+id/gview_slots"
             android:layout_width="match_parent"
@@ -250,7 +265,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginTop="40dp"
-            android:drawableRight="@drawable/ic_check_black_24dp"
+            android:drawableRight="@drawable/tick_mark"
             android:text="Confirm"
             android:textColor="@color/colorPrimaryDark" />
     </LinearLayout>

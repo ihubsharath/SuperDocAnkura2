@@ -20,6 +20,7 @@ import com.example.superdoc_ankura.pojos.response.DoctorSessionResponse;
 import com.example.superdoc_ankura.pojos.response.DoctorTimeSlotsResponse;
 import com.example.superdoc_ankura.pojos.response.GetListOfCancelledAppointmentsResponse;
 import com.example.superdoc_ankura.pojos.response.GetListOfNoShowAppointmentsResponse;
+import com.example.superdoc_ankura.pojos.response.GetNotificationsResponse;
 import com.example.superdoc_ankura.pojos.response.GetPatientContactDetailsResponse;
 import com.example.superdoc_ankura.pojos.response.ListOfDoctorContactsResponse;
 import com.example.superdoc_ankura.pojos.response.ListOfSessionsBySelectedDatesResponse;
@@ -130,4 +131,8 @@ public interface ServiceCalls {
 
     @GET("getDoctorPatientContactDetailV2")
     Call<GetPatientContactDetailsResponse> getPatientContactDetails(@Query("doctorId") String doctorid,@Query("patientId") String patientId);
+
+    @GET("listOfDoctorBookingNotificationsV2")
+    Call<ArrayList<GetNotificationsResponse>> getNotifications(@Query("doctorId") String doctorid);
+
 }

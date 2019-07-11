@@ -42,9 +42,24 @@
 
     <style name="CustomDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/colorPrimaryDark</item>
-        <item name="android:textColorPrimary">#000000</item>
+        <item name="android:textColorPrimary">#1B2036</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@string/font2</item>
         <item name="android:windowBackground">@drawable/background_dialog</item>
+        <item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_bottom</item>
     </style>
+
+    <style name="DialogAnimation_2">
+        <item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_bottom</item>
+    </style>
+
+    <style name="DialogAnimationProfile">
+        <item name="android:windowEnterAnimation">@anim/profile_slide_down</item>
+        <item name="android:windowExitAnimation">@anim/profile_slide_up</item>
+    </style>
+
 
     <style name="MarkLeaveDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
         <!--buttons color-->
@@ -53,13 +68,6 @@
         <item name="android:textColorPrimary">#000000</item>
         <!--dialog background-->
         <item name="android:windowBackground">@drawable/background_mark_leave</item>
-    </style>
-
-    <style name="alphabetTextView">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">10sp</item>
-        <!--<item name="android:layout_gravity">center</item>-->
-        <!--<item name="android:onClick">quickScroll</item>-->
     </style>
 
 
@@ -72,5 +80,10 @@
 
         <!-- inactive track color (30% transparency) -->
         <item name="android:colorForeground">#42221f1f</item>
+    </style>
+
+    <style name="CalendarWidgetHeader">
+        <item name="android:fontFamily">@string/font</item>
+        <!--<item name="android:textSize">20sp</item>-->
     </style>
 </resources>

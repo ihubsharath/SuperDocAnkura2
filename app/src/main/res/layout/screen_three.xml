@@ -2,14 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:background="#ffffff"
     android:orientation="vertical">
-    <ImageView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/intro_slider_three"
-        android:layout_marginBottom="70dp"/>
+        android:layout_height="@dimen/_100sdp"
+        android:gravity="center"
+        android:background="@drawable/top_curve" >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/bluetooth"/>
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/screenoneimage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:src="@drawable/slider_three" />
+    <ImageView
+        android:id="@+id/screenoneimage2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:background="@drawable/intro_text_three_2" />
 
 
 </LinearLayout>

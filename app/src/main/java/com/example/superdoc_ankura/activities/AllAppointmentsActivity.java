@@ -2,18 +2,18 @@ package com.example.superdoc_ankura.activities;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -21,14 +21,16 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.superdoc_ankura.R;
 import com.example.superdoc_ankura.adapters.AllAppointmentsAdapter;
@@ -37,7 +39,6 @@ import com.example.superdoc_ankura.adapters.ConfirmedAppointmentsAdapter;
 import com.example.superdoc_ankura.adapters.GridViewProceduresAdapter;
 import com.example.superdoc_ankura.adapters.GridViewSlotsAdapter;
 import com.example.superdoc_ankura.adapters.NoShowAppointmentsAdapter;
-import com.example.superdoc_ankura.fragments.GraphFragment;
 import com.example.superdoc_ankura.pojos.request.BookDoctorAppointmentRequest;
 import com.example.superdoc_ankura.pojos.request.DoctorDelayRequest;
 import com.example.superdoc_ankura.pojos.response.AllAppointmentsResponse;
@@ -50,6 +51,7 @@ import com.example.superdoc_ankura.pojos.response.DoctorTimeSlotsResponse;
 import com.example.superdoc_ankura.pojos.response.GetListOfCancelledAppointmentsResponse;
 import com.example.superdoc_ankura.pojos.response.GetListOfNoShowAppointmentsResponse;
 import com.example.superdoc_ankura.utils.BaseActivity;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -58,21 +60,21 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AllAppointmentsActivity extends BaseActivity {
+    //implements SearchView.OnQueryTextListener
     static AllAppointmentsActivity allAppointmentsActivity;
     int hour2;
     private int hour3;
     LinearLayout llStart, llDelay, llAdd;
     TextView tvStart, tvDelay, tvAdd;
     ImageView ivStart, ivDelay, ivAdd;
+
+    List<AllAppointmentsResponse> allAppointmentsResponses;
 
     public GridView gridViewSlots, gridViewProcedure;
     TextView noDataFound;
@@ -97,6 +99,15 @@ public class AllAppointmentsActivity extends BaseActivity {
     public int slotID;
     public int procedureID;
     public TextView todayDate, pickslot, procedure;
+    private String formattedDate;
+    ImageView searchIcon;
+    CardView cardView;
+    SearchView searchView;
+    LinearLayout layoutSearchIcon, layoutSearchView;
+    TextView cancelSearch;
+    ShimmerFrameLayout mShimmerViewContainer;
+    private TextView noSlotsFound;
+    LinearLayout no_checkin_appointments_view, no_noshow_appointments_view, no_cancel_appointments_view, no_all_appointments_view;
 
 
     @Override
@@ -104,9 +115,38 @@ public class AllAppointmentsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_appointments);
         allAppointmentsActivity = this;
+
+        mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
+
+        no_checkin_appointments_view = findViewById(R.id.no_checkin_appointments_view);
+        no_noshow_appointments_view = findViewById(R.id.no_noshow_appointments_view);
+        no_cancel_appointments_view = findViewById(R.id.no_cancel_appointments_view);
+        no_all_appointments_view = findViewById(R.id.no_all_appointments_view);
         layoutSession = findViewById(R.id.layout_session);
         noDataFound = findViewById(R.id.noDataFound);
         noDataFound.setTypeface(faceProximaRegular);
+        layoutSearchIcon = findViewById(R.id.layoutSearchIcon);
+        layoutSearchView = findViewById(R.id.layoutSearchView);
+        cancelSearch = findViewById(R.id.cancelSearch);
+        searchIcon = findViewById(R.id.ivSearchIcon);
+        cardView = findViewById(R.id.cardView);
+        searchView = findViewById(R.id.searchView);
+        searchIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                layoutSearchIcon.setVisibility(View.GONE);
+                layoutSearchView.setVisibility(View.VISIBLE);
+            }
+        });
+        cancelSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                layoutSearchIcon.setVisibility(View.VISIBLE);
+                layoutSearchView.setVisibility(View.GONE);
+                searchView.setQuery("", false);
+            }
+        });
+
 
         layoutSession.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +156,16 @@ public class AllAppointmentsActivity extends BaseActivity {
 
             }
 
+        });
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+
+            }
         });
 
 
@@ -152,7 +202,7 @@ public class AllAppointmentsActivity extends BaseActivity {
         cancelAppointments = findViewById(R.id.cancelAppointments);
         cancelAppointmentsSize = findViewById(R.id.cancelAppointmentsSize);
         cancelAppointmentsSize.setTypeface(faceMedium);
-        TextView textCheckIn,textNoShow,textCancel,textAll;
+        TextView textCheckIn, textNoShow, textCancel, textAll;
         textCheckIn = findViewById(R.id.textCheckIn);
         textNoShow = findViewById(R.id.textNoShow);
         textCancel = findViewById(R.id.textCancel);
@@ -206,7 +256,7 @@ public class AllAppointmentsActivity extends BaseActivity {
                     }
                     view.setBackgroundColor(ContextCompat.getColor(AllAppointmentsActivity.this, R.color.colorPrimaryDark));
 
-                    FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
+                    CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) view.getLayoutParams();
                     params.height = 170;
                     view.setLayoutParams(params);
 
@@ -225,14 +275,20 @@ public class AllAppointmentsActivity extends BaseActivity {
             public void onClick(View v) {
                 Dialog dialog;
                 LayoutInflater inflater = (LayoutInflater) getLayoutInflater();
-                View customView = inflater.inflate(R.layout.delay_dailog_popup, null);
-                dialog = new Dialog(AllAppointmentsActivity.this, R.style.CustomDialogTheme);
+                View customView = inflater.inflate(R.layout.delay_dialog_popup_2, null);
+
+
+                dialog = new Dialog(AllAppointmentsActivity.this,R.style.CustomDialogTheme);
                 dialog.setContentView(customView);
-
-
+                LinearLayout custom_dialog_root_layout = dialog.findViewById(R.id.custom_dialog);
+//custom_dialog_root_layout.setAnimation(animation);
+                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation_2;
                 dialog.getWindow().setLayout(((getWidth(AllAppointmentsActivity.this) / 100) * 90), ((getHeight(AllAppointmentsActivity.this) / 100) * 80));
                 dialog.getWindow().setGravity(Gravity.CENTER);
                 dialog.show();
+//                Animation animation = AnimationUtils.loadAnimation(dialog.getContext(),
+//                        R.anim.slide_in_bottom_login);
+//                customView.setAnimation(animation);
 
                 final TimePicker startTime = dialog.findViewById(R.id.start_time);
                 TimePicker endTime = dialog.findViewById(R.id.end_time);
@@ -250,6 +306,7 @@ public class AllAppointmentsActivity extends BaseActivity {
                 final TextView tv_start_time = dialog.findViewById(R.id.tv_start_time);
                 final TextView tv_end_time = dialog.findViewById(R.id.tv_end_time);
                 TextView tv_end_at_usual_time = dialog.findViewById(R.id.tv_end_at_usual_time);
+                LinearLayout layout_end_at_usual_time = dialog.findViewById(R.id.layout_end_at_usual_time);
 
 
                 textMarkDelay.setTypeface(faceProximaRegular);
@@ -264,7 +321,7 @@ public class AllAppointmentsActivity extends BaseActivity {
 
                 LinearLayout proceed = dialog.findViewById(R.id.proceed);
 
-                tv_end_at_usual_time.setOnClickListener(new View.OnClickListener() {
+                layout_end_at_usual_time.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
@@ -545,11 +602,14 @@ public class AllAppointmentsActivity extends BaseActivity {
 
                 customDialog = new Dialog(AllAppointmentsActivity.this, R.style.CustomDialogTheme);
                 customDialog.setContentView(customView);
-
+                customDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation_2;
                 customDialog.getWindow().setLayout(((getWidth(AllAppointmentsActivity.this) / 100) * 90), ((getHeight(AllAppointmentsActivity.this) / 100) * 80));
                 customDialog.getWindow().setGravity(Gravity.CENTER);
                 customDialog.show();
 
+//                ImageView ivCloseDialog = customDialog.findViewById(R.id.ivCloseDialog);
+                noSlotsFound = customDialog.findViewById(R.id.noDataFound);
+                noSlotsFound.setTypeface(faceProximaRegular);
                 TextView location, sessionTime, textLocation, textSessionTime;
                 location = customDialog.findViewById(R.id.location);
                 sessionTime = customDialog.findViewById(R.id.session);
@@ -563,6 +623,7 @@ public class AllAppointmentsActivity extends BaseActivity {
                 sessionTime.setText(SessionTime);
                 ImageView ivPreviousDate, ivNextDate;
                 ivPreviousDate = customDialog.findViewById(R.id.iv_previous_date);
+
                 ivNextDate = customDialog.findViewById(R.id.iv_next_date);
                 todayDate = customDialog.findViewById(R.id.tv_date);
                 todayDate.setTypeface(faceRegular);
@@ -601,23 +662,40 @@ public class AllAppointmentsActivity extends BaseActivity {
 //horizontal calendar view
                 Calendar c = Calendar.getInstance();
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                String formattedDate = df.format(c.getTime());
+                formattedDate = df.format(c.getTime());
                 todayDate.setText(formattedDate);
+
+                if (todayDate.getText().toString().equals(formattedDate)) {
+                    DrawableCompat.setTint(ivPreviousDate.getDrawable(), ContextCompat.getColor(customDialog.getContext(), R.color.grey));
+                    ivPreviousDate.setEnabled(false);
+                }
 
                 ivPreviousDate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        c.add(Calendar.DATE, -1);
-                        todayDate.setText(df.format(c.getTime()));
-                        doGetTimeSlots(customDialog);
-                        doGetProcedurs(customDialog);
+
+                        if (todayDate.getText().toString().equals(formattedDate)) {
+                            DrawableCompat.setTint(ivPreviousDate.getDrawable(), ContextCompat.getColor(customDialog.getContext(), R.color.grey));
+                            ivPreviousDate.setEnabled(false);
+                        } else {
+                            c.add(Calendar.DATE, -1);
+                            String previousDate = df.format(c.getTime());
+                            todayDate.setText(previousDate);
+                            doGetTimeSlots(customDialog);
+                            doGetProcedurs(customDialog);
+                        }
                     }
                 });
                 ivNextDate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        DrawableCompat.setTint(ivPreviousDate.getDrawable(), ContextCompat.getColor(customDialog.getContext(), R.color.colorPrimaryDark));
+                        ivPreviousDate.setEnabled(true);
+
                         c.add(Calendar.DATE, 1);
-                        todayDate.setText(df.format(c.getTime()));
+                        String nextDate = df.format(c.getTime());
+
+                        todayDate.setText(nextDate);
                         doGetTimeSlots(customDialog);
                         doGetProcedurs(customDialog);
                     }
@@ -625,7 +703,12 @@ public class AllAppointmentsActivity extends BaseActivity {
                 doGetTimeSlots(customDialog);
                 doGetProcedurs(customDialog);
 
-
+//                ivCloseDialog.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        customDialog.dismiss();
+//                    }
+//                });
                 confirmAppointment.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -637,6 +720,7 @@ public class AllAppointmentsActivity extends BaseActivity {
                          * emailId : mani.reddy727@gmail.com
                          * bookedType : Doctor
                          */
+
                         BookDoctorAppointmentRequest bookDoctorAppointmentRequest = new BookDoctorAppointmentRequest(
                                 slotID,
                                 procedureID,
@@ -645,23 +729,42 @@ public class AllAppointmentsActivity extends BaseActivity {
                                 etEmailID.getText().toString(),
                                 "Doctor");
                         Log.d("bookdoctorapptrequest", bookDoctorAppointmentRequest.toString());
-                        Call<BookDoctorAppointmentResponse> call1 = serviceCalls.doBookDoctorAppointment(bookDoctorAppointmentRequest);
-                        call1.enqueue(new Callback<BookDoctorAppointmentResponse>() {
-                            @Override
-                            public void onResponse(Call<BookDoctorAppointmentResponse> call, Response<BookDoctorAppointmentResponse> response) {
-                                if (response.code() == 200) {
-                                    customDialog.dismiss();
-                                    showAlertDialog(response.body().getMsg());
-                                } else if (response.code() == 204) {
-                                    showAlertDialog("Booking failed...please try again");
+                        if (slotID == 0) {
+                            showToast("please select slot");
+                        } else if (procedureID == 0) {
+                            showToast("please select procedure");
+                        } else if (etMobile.getText().toString().isEmpty()) {
+                            etMobile.setError(getResources().getString(R.string.required_field));
+                        } else if (etPatientName.getText().toString().isEmpty()) {
+                            etPatientName.setError(getResources().getString(R.string.required_field));
+                        } else if (etEmailID.getText().toString().isEmpty()) {
+                            etEmailID.setError(getResources().getString(R.string.required_field));
+                        } else {
+                            Call<BookDoctorAppointmentResponse> call1 = serviceCalls.doBookDoctorAppointment(bookDoctorAppointmentRequest);
+                            showDialog();
+                            call1.enqueue(new Callback<BookDoctorAppointmentResponse>() {
+                                @Override
+                                public void onResponse(Call<BookDoctorAppointmentResponse> call, Response<BookDoctorAppointmentResponse> response) {
+                                    closeDialog();
+                                    if (response.code() == 200) {
+                                        customDialog.dismiss();
+                                        showAlertDialog(response.body().getMsg());
+                                        // allAppointmentsAdapter.notifyDataSetChanged();
+                                    } else if (response.code() == 204) {
+                                        showAlertDialog("Booking failed...please try again");
+                                    } else if (response.code() == 800) {
+                                        showAlertDialog("Doctor Consultation has failed to book");
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onFailure(Call<BookDoctorAppointmentResponse> call, Throwable t) {
-                                showAlertDialog(t.getMessage());
-                            }
-                        });
+                                @Override
+                                public void onFailure(Call<BookDoctorAppointmentResponse> call, Throwable t) {
+                                    closeDialog();
+                                    showAlertDialog(t.getMessage());
+                                }
+                            });
+                        }
+
                     }
                 });
             }
@@ -704,14 +807,20 @@ public class AllAppointmentsActivity extends BaseActivity {
                     @Override
                     public void onResponse(Call<ArrayList<DoctorTimeSlotsResponse>> call, Response<ArrayList<DoctorTimeSlotsResponse>> response) {
                         if (response.code() == 200) {
+                            noSlotsFound.setVisibility(View.GONE);
+                            gridViewSlots.setVisibility(View.VISIBLE);
                             ArrayList<DoctorTimeSlotsResponse> doctorTimeSlotsResponses = response.body();
                             GridViewSlotsAdapter gridViewSlotsAdapter = new GridViewSlotsAdapter(customDialog.getContext(), doctorTimeSlotsResponses);
                             gridViewSlots.setAdapter(gridViewSlotsAdapter);
 
                         } else if (response.code() == 600) {
                             showToast("OPPS Something went wrong....");
+                            noSlotsFound.setVisibility(View.VISIBLE);
+                            gridViewSlots.setVisibility(View.GONE);
                         } else if (response.code() == 204) {
                             showToast("No Slots Found");
+                            noSlotsFound.setVisibility(View.VISIBLE);
+                            gridViewSlots.setVisibility(View.GONE);
                         }
                     }
 
@@ -737,6 +846,8 @@ public class AllAppointmentsActivity extends BaseActivity {
         checkinAppointments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Animation noshow_animation = AnimationUtils.loadAnimation(AllAppointmentsActivity.this,R.anim.slide_up);
+                checkinAppointments.setAnimation(noshow_animation);
                 allAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
                 checkinAppointments.setBackgroundResource(R.drawable.tv_bottom_line_dark);
                 noshowAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
@@ -749,6 +860,8 @@ public class AllAppointmentsActivity extends BaseActivity {
         noshowAppointments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Animation noshow_animation = AnimationUtils.loadAnimation(AllAppointmentsActivity.this,R.anim.slide_up);
+                noshowAppointments.setAnimation(noshow_animation);
                 allAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
                 checkinAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
                 noshowAppointments.setBackgroundResource(R.drawable.tv_bottom_line_dark);
@@ -761,6 +874,8 @@ public class AllAppointmentsActivity extends BaseActivity {
         cancelAppointments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Animation noshow_animation = AnimationUtils.loadAnimation(AllAppointmentsActivity.this,R.anim.slide_up);
+                cancelAppointments.setAnimation(noshow_animation);
                 allAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
                 checkinAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
                 noshowAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
@@ -774,6 +889,8 @@ public class AllAppointmentsActivity extends BaseActivity {
         allAppointments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Animation noshow_animation = AnimationUtils.loadAnimation(AllAppointmentsActivity.this,R.anim.slide_up);
+                allAppointments.setAnimation(noshow_animation);
                 allAppointments.setBackgroundResource(R.drawable.tv_bottom_line_dark);
                 checkinAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
                 noshowAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
@@ -791,11 +908,15 @@ public class AllAppointmentsActivity extends BaseActivity {
     public void getAppointmentsCount() {
         Call<AllCountsResponse> call = BaseActivity.getInstance().serviceCalls.getAllCounts(sessionManager.getDOCTORID(),
                 AllAppointmentsActivity.getInstance().sessionId);
+        Log.d("appointmentscount", sessionManager.getDOCTORID() + "\n" +
+                AllAppointmentsActivity.getInstance().sessionId);
         call.enqueue(new Callback<AllCountsResponse>() {
             @Override
             public void onResponse(Call<AllCountsResponse> call, Response<AllCountsResponse> response) {
                 if (response.code() == 200) {
                     AllCountsResponse allCountsResponse = response.body();
+                    Log.d("appointmentscounts",
+                            AllAppointmentsActivity.getInstance().sessionId + "\n" + allCountsResponse.toString());
                     allAppointmentsSize.setText(String.valueOf(allCountsResponse.getAllCount()));
                     checkinAppointmentsSize.setText(String.valueOf(allCountsResponse.getCheckinCount()));
                     cancelAppointmentsSize.setText(String.valueOf(allCountsResponse.getCancelCount()));
@@ -809,7 +930,7 @@ public class AllAppointmentsActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<AllCountsResponse> call, Throwable t) {
-
+                showAlertDialog(t.getMessage());
             }
         });
     }
@@ -830,38 +951,79 @@ public class AllAppointmentsActivity extends BaseActivity {
 
     private void getlistOfCancelledAppointments() {
         Call<List<GetListOfCancelledAppointmentsResponse>> call = serviceCalls.getListOfCancelledAppointments(sessionManager.getDOCTORID(), sessionId);
-        showDialog();
+//        showDialog();
+        mShimmerViewContainer.startShimmerAnimation();
         call.enqueue(new Callback<List<GetListOfCancelledAppointmentsResponse>>() {
             @Override
             public void onResponse(Call<List<GetListOfCancelledAppointmentsResponse>> call, Response<List<GetListOfCancelledAppointmentsResponse>> response) {
-                closeDialog();
+//                closeDialog();
+                mShimmerViewContainer.stopShimmerAnimation();
                 if (response.code() == 200) {
                     List<GetListOfCancelledAppointmentsResponse> cancelledAppointmentsResponseList = response.body();
                     if (cancelledAppointmentsResponseList.size() == 0) {
                         rview.setAdapter(null);
 //                        showAlertDialog("No Cancelled Appointments Found");
-                        noDataFound.setVisibility(View.VISIBLE);
+                        no_cancel_appointments_view.setVisibility(View.VISIBLE);
+                        no_checkin_appointments_view.setVisibility(View.GONE);
+                        no_noshow_appointments_view.setVisibility(View.GONE);
+                        no_all_appointments_view.setVisibility(View.GONE);
                         rview.setVisibility(View.GONE);
                     } else {
-                        noDataFound.setVisibility(View.GONE);
+                        no_cancel_appointments_view.setVisibility(View.GONE);
+                        no_checkin_appointments_view.setVisibility(View.GONE);
+                        no_noshow_appointments_view.setVisibility(View.GONE);
+                        no_all_appointments_view.setVisibility(View.GONE);
                         rview.setVisibility(View.VISIBLE);
                         cancelledAppointmentsAdapter = new CancelledAppointmentsAdapter(AllAppointmentsActivity.this, cancelledAppointmentsResponseList);
                         rview.setAdapter(cancelledAppointmentsAdapter);
                         cancelledAppointmentsAdapter.notifyDataSetChanged();
+                        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                            @Override
+                            public boolean onQueryTextSubmit(String query) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onQueryTextChange(String newText) {
+                                try {
+                                    if (cancelledAppointmentsResponseList.toString().toLowerCase().contains(newText.toLowerCase())) {
+                                        cancelledAppointmentsAdapter.getFilter().filter(newText.toLowerCase());
+                                    } else {
+                                        allAppointments.setBackgroundResource(R.drawable.tv_bottom_line_dark);
+                                        checkinAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
+                                        noshowAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
+                                        cancelAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
+                                        getAllAppointments();
+                                        getAppointmentsCount();
+//                                        Toast.makeText(AllAppointmentsActivity.this, "No Match Found", Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                return true;
+                            }
+                        });
                     }
                 } else if (response.code() == 600) {
-                    noDataFound.setVisibility(View.VISIBLE);
+                    no_cancel_appointments_view.setVisibility(View.VISIBLE);
+                    no_checkin_appointments_view.setVisibility(View.GONE);
+                    no_noshow_appointments_view.setVisibility(View.GONE);
+                    no_all_appointments_view.setVisibility(View.GONE);
                     rview.setVisibility(View.GONE);
                     showToast("OPPS Something went wrong....");
                 } else if (response.code() == 204) {
-                    noDataFound.setVisibility(View.VISIBLE);
+                    no_cancel_appointments_view.setVisibility(View.VISIBLE);
+                    no_checkin_appointments_view.setVisibility(View.GONE);
+                    no_noshow_appointments_view.setVisibility(View.GONE);
+                    no_all_appointments_view.setVisibility(View.GONE);
                     rview.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onFailure(Call<List<GetListOfCancelledAppointmentsResponse>> call, Throwable t) {
-                closeDialog();
+                mShimmerViewContainer.stopShimmerAnimation();
                 showAlertDialog(t.getMessage());
             }
         });
@@ -869,38 +1031,82 @@ public class AllAppointmentsActivity extends BaseActivity {
 
     private void getlistOfNoShowAppointments() {
         Call<List<GetListOfNoShowAppointmentsResponse>> call = serviceCalls.getListOfNoShowAppointments(sessionManager.getDOCTORID(), sessionId);
-        showDialog();
+//        showDialog();
+        mShimmerViewContainer.startShimmerAnimation();
         call.enqueue(new Callback<List<GetListOfNoShowAppointmentsResponse>>() {
             @Override
             public void onResponse(Call<List<GetListOfNoShowAppointmentsResponse>> call, Response<List<GetListOfNoShowAppointmentsResponse>> response) {
-                closeDialog();
+//                closeDialog();
+                mShimmerViewContainer.stopShimmerAnimation();
                 if (response.code() == 200) {
                     List<GetListOfNoShowAppointmentsResponse> noShowAppointmentsResponseList = response.body();
                     if (noShowAppointmentsResponseList.size() == 0) {
                         rview.setAdapter(null);
 //                        showAlertDialog("No no-show Appointments Found");
-                        noDataFound.setVisibility(View.VISIBLE);
+                        no_noshow_appointments_view.setVisibility(View.VISIBLE);
+                        no_cancel_appointments_view.setVisibility(View.GONE);
+                        no_checkin_appointments_view.setVisibility(View.GONE);
+                        no_all_appointments_view.setVisibility(View.GONE);
                         rview.setVisibility(View.GONE);
                     } else {
-                        noDataFound.setVisibility(View.GONE);
+                        no_cancel_appointments_view.setVisibility(View.GONE);
+                        no_checkin_appointments_view.setVisibility(View.GONE);
+                        no_noshow_appointments_view.setVisibility(View.GONE);
+                        no_all_appointments_view.setVisibility(View.GONE);
                         rview.setVisibility(View.VISIBLE);
                         noShowAppointmentsAdapter = new NoShowAppointmentsAdapter(AllAppointmentsActivity.this, noShowAppointmentsResponseList);
                         rview.setAdapter(noShowAppointmentsAdapter);
                         noShowAppointmentsAdapter.notifyDataSetChanged();
+
+                        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                            @Override
+                            public boolean onQueryTextSubmit(String query) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onQueryTextChange(String newText) {
+                                try {
+                                    if (noShowAppointmentsResponseList.toString().toLowerCase().contains(newText.toLowerCase())) {
+                                        noShowAppointmentsAdapter.getFilter().filter(newText.toLowerCase());
+
+                                    } else {
+                                        allAppointments.setBackgroundResource(R.drawable.tv_bottom_line_dark);
+                                        checkinAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
+                                        noshowAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
+                                        cancelAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
+                                        getAllAppointments();
+                                        getAppointmentsCount();
+//                                        Toast.makeText(AllAppointmentsActivity.this, "No Match Found", Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                return true;
+                            }
+                        });
+
                     }
                 } else if (response.code() == 600) {
-                    noDataFound.setVisibility(View.VISIBLE);
+                    no_noshow_appointments_view.setVisibility(View.VISIBLE);
+                    no_cancel_appointments_view.setVisibility(View.GONE);
+                    no_checkin_appointments_view.setVisibility(View.GONE);
+                    no_all_appointments_view.setVisibility(View.GONE);
                     rview.setVisibility(View.GONE);
                     showToast("OPPS Something went wrong....");
                 } else if (response.code() == 204) {
-                    noDataFound.setVisibility(View.VISIBLE);
+                    no_noshow_appointments_view.setVisibility(View.VISIBLE);
+                    no_cancel_appointments_view.setVisibility(View.GONE);
+                    no_checkin_appointments_view.setVisibility(View.GONE);
+                    no_all_appointments_view.setVisibility(View.GONE);
                     rview.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onFailure(Call<List<GetListOfNoShowAppointmentsResponse>> call, Throwable t) {
-                closeDialog();
+                mShimmerViewContainer.stopShimmerAnimation();
                 showAlertDialog(t.getMessage());
             }
         });
@@ -909,39 +1115,77 @@ public class AllAppointmentsActivity extends BaseActivity {
     public void getAllAppointments() {
         Call<List<AllAppointmentsResponse>> call = serviceCalls.getAllAppointments(sessionManager.getDOCTORID(), sessionId);
 
-        showDialog();
+        mShimmerViewContainer.startShimmerAnimation();
         call.enqueue(new Callback<List<AllAppointmentsResponse>>() {
             @Override
             public void onResponse(Call<List<AllAppointmentsResponse>> call, Response<List<AllAppointmentsResponse>> response) {
-                closeDialog();
+                mShimmerViewContainer.stopShimmerAnimation();
                 if (response.code() == 200) {
-                    List<AllAppointmentsResponse> allAppointmentsResponses = response.body();
+                    allAppointmentsResponses = response.body();
                     if (allAppointmentsResponses.size() == 0) {
                         rview.setAdapter(null);
 //                        showAlertDialog("No Appointments Found");
-                        noDataFound.setVisibility(View.VISIBLE);
+                        no_all_appointments_view.setVisibility(View.VISIBLE);
+                        no_cancel_appointments_view.setVisibility(View.GONE);
+                        no_checkin_appointments_view.setVisibility(View.GONE);
+                        no_noshow_appointments_view.setVisibility(View.GONE);
                         rview.setVisibility(View.GONE);
                     } else {
-                        noDataFound.setVisibility(View.GONE);
+                        no_cancel_appointments_view.setVisibility(View.GONE);
+                        no_checkin_appointments_view.setVisibility(View.GONE);
+                        no_noshow_appointments_view.setVisibility(View.GONE);
+                        no_all_appointments_view.setVisibility(View.GONE);
                         rview.setVisibility(View.VISIBLE);
                         allAppointmentsAdapter = new AllAppointmentsAdapter(AllAppointmentsActivity.this, allAppointmentsResponses);
                         rview.setAdapter(allAppointmentsAdapter);
                         allAppointmentsAdapter.notifyDataSetChanged();
+                        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                            @Override
+                            public boolean onQueryTextSubmit(String query) {
+                                return false;
+                            }
 
+                            @Override
+                            public boolean onQueryTextChange(String newText) {
+                                try {
+                                    if (allAppointmentsResponses.toString().toLowerCase().contains(newText.toLowerCase())) {
+                                        allAppointmentsAdapter.getFilter().filter(newText.toLowerCase());
+                                    } else {
+//                                        allAppointments.setBackgroundResource(R.drawable.tv_bottom_line_dark);
+//                                        checkinAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
+//                                        noshowAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
+//                                        cancelAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
+//                                        getAllAppointments();
+//                                        getAppointmentsCount();
+                                        Toast.makeText(AllAppointmentsActivity.this, "No Match Found", Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                return true;
+                            }
+                        });
                     }
                 } else if (response.code() == 600) {
-                    noDataFound.setVisibility(View.VISIBLE);
+                    no_all_appointments_view.setVisibility(View.VISIBLE);
+                    no_cancel_appointments_view.setVisibility(View.GONE);
+                    no_checkin_appointments_view.setVisibility(View.GONE);
+                    no_noshow_appointments_view.setVisibility(View.GONE);
                     rview.setVisibility(View.GONE);
                     showToast("OPPS Something went wrong....");
                 } else if (response.code() == 204) {
-                    noDataFound.setVisibility(View.VISIBLE);
+                    no_all_appointments_view.setVisibility(View.VISIBLE);
+                    no_cancel_appointments_view.setVisibility(View.GONE);
+                    no_checkin_appointments_view.setVisibility(View.GONE);
+                    no_noshow_appointments_view.setVisibility(View.GONE);
                     rview.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onFailure(Call<List<AllAppointmentsResponse>> call, Throwable t) {
-                closeDialog();
+                mShimmerViewContainer.stopShimmerAnimation();
                 showAlertDialog(t.getMessage());
             }
         });
@@ -950,30 +1194,72 @@ public class AllAppointmentsActivity extends BaseActivity {
     private void getlistOfConfirmedAppointments() {
         Call<List<ConfirmedAppointmentsResponse>> call = serviceCalls.getListOfConfirmedAppointments(sessionManager.getDOCTORID(), sessionId);
 //        showDialog();
+        mShimmerViewContainer.startShimmerAnimation();
         call.enqueue(new Callback<List<ConfirmedAppointmentsResponse>>() {
             @Override
             public void onResponse(Call<List<ConfirmedAppointmentsResponse>> call, Response<List<ConfirmedAppointmentsResponse>> response) {
 //                closeDialog();
+                mShimmerViewContainer.stopShimmerAnimation();
                 if (response.code() == 200) {
                     List<ConfirmedAppointmentsResponse> confirmedAppointmentsResponseList = response.body();
                     if (confirmedAppointmentsResponseList.size() == 0) {
                         rview.setAdapter(null);
                         //showAlertDialog("No Confirmed Appointments Found");
-                        noDataFound.setVisibility(View.VISIBLE);
+                        no_checkin_appointments_view.setVisibility(View.VISIBLE);
+                        no_cancel_appointments_view.setVisibility(View.GONE);
+                        no_noshow_appointments_view.setVisibility(View.GONE);
+                        no_all_appointments_view.setVisibility(View.GONE);
                         rview.setVisibility(View.GONE);
                     } else {
-                        noDataFound.setVisibility(View.GONE);
+                        no_cancel_appointments_view.setVisibility(View.GONE);
+                        no_checkin_appointments_view.setVisibility(View.GONE);
+                        no_noshow_appointments_view.setVisibility(View.GONE);
+                        no_all_appointments_view.setVisibility(View.GONE);
                         rview.setVisibility(View.VISIBLE);
                         confirmedAppointmentsAdapter = new ConfirmedAppointmentsAdapter(AllAppointmentsActivity.this, confirmedAppointmentsResponseList);
                         rview.setAdapter(confirmedAppointmentsAdapter);
                         confirmedAppointmentsAdapter.notifyDataSetChanged();
+
+                        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                            @Override
+                            public boolean onQueryTextSubmit(String query) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onQueryTextChange(String newText) {
+                                try {
+                                    if (confirmedAppointmentsResponseList.toString().toLowerCase().contains(newText.toLowerCase())) {
+                                        confirmedAppointmentsAdapter.getFilter().filter(newText.toLowerCase());
+                                    } else {
+                                        allAppointments.setBackgroundResource(R.drawable.tv_bottom_line_dark);
+                                        checkinAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
+                                        noshowAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
+                                        cancelAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
+                                        getAllAppointments();
+                                        getAppointmentsCount();
+//                                        Toast.makeText(AllAppointmentsActivity.this, "No Match Found", Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                return true;
+                            }
+                        });
                     }
                 } else if (response.code() == 600) {
-                    noDataFound.setVisibility(View.VISIBLE);
+                    no_checkin_appointments_view.setVisibility(View.VISIBLE);
+                    no_cancel_appointments_view.setVisibility(View.GONE);
+                    no_noshow_appointments_view.setVisibility(View.GONE);
+                    no_all_appointments_view.setVisibility(View.GONE);
                     rview.setVisibility(View.GONE);
                     showToast("OPPS Something went wrong....");
                 } else if (response.code() == 204) {
-                    noDataFound.setVisibility(View.VISIBLE);
+                    no_checkin_appointments_view.setVisibility(View.VISIBLE);
+                    no_cancel_appointments_view.setVisibility(View.GONE);
+                    no_noshow_appointments_view.setVisibility(View.GONE);
+                    no_all_appointments_view.setVisibility(View.GONE);
                     rview.setVisibility(View.GONE);
                 }
 
@@ -981,7 +1267,7 @@ public class AllAppointmentsActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<List<ConfirmedAppointmentsResponse>> call, Throwable t) {
-//                closeDialog();
+                mShimmerViewContainer.stopShimmerAnimation();
                 showAlertDialog(t.getMessage());
             }
         });
@@ -991,5 +1277,6 @@ public class AllAppointmentsActivity extends BaseActivity {
     public static AllAppointmentsActivity getInstance() {
         return allAppointmentsActivity;
     }
+
 
 }

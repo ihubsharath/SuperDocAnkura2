@@ -6,21 +6,26 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 
 import com.example.superdoc_ankura.R;
 import com.example.superdoc_ankura.activities.AllAppointmentsActivity;
 import com.example.superdoc_ankura.holders.NoShowAppointmentsHolder;
+import com.example.superdoc_ankura.pojos.response.AllAppointmentsResponse;
 import com.example.superdoc_ankura.pojos.response.GetListOfNoShowAppointmentsResponse;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class NoShowAppointmentsAdapter extends RecyclerView.Adapter<NoShowAppointmentsHolder> {
     AllAppointmentsActivity allAppointmentsActivity;
     List<GetListOfNoShowAppointmentsResponse> noShowAppointmentsResponseList;
-
+    List<GetListOfNoShowAppointmentsResponse> mFilterdList;
     public NoShowAppointmentsAdapter(AllAppointmentsActivity allAppointmentsActivity, List<GetListOfNoShowAppointmentsResponse> noShowAppointmentsResponseList) {
         this.allAppointmentsActivity = allAppointmentsActivity;
         this.noShowAppointmentsResponseList = noShowAppointmentsResponseList;
+        mFilterdList = noShowAppointmentsResponseList;
     }
 
     @NonNull
@@ -42,5 +47,34 @@ public class NoShowAppointmentsAdapter extends RecyclerView.Adapter<NoShowAppoin
     @Override
     public int getItemCount() {
         return noShowAppointmentsResponseList.size();
+    }
+
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    noShowAppointmentsResponseList = mFilterdList;
+                } else {
+                    ArrayList<GetListOfNoShowAppointmentsResponse> filteredList = new ArrayList<>();
+                    for (GetListOfNoShowAppointmentsResponse response : mFilterdList) {
+                        if (response.getPatientName().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(response);
+                        }
+                    }
+                    noShowAppointmentsResponseList = filteredList;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = noShowAppointmentsResponseList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                noShowAppointmentsResponseList = (ArrayList<GetListOfNoShowAppointmentsResponse>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 }

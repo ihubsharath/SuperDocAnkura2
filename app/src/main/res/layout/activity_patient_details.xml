@@ -38,9 +38,11 @@
             android:gravity="center">
 
             <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/call" />
+                android:id="@+id/ivCallToPatientMobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:src="@drawable/phone_call" />
         </LinearLayout>
     </LinearLayout>
 

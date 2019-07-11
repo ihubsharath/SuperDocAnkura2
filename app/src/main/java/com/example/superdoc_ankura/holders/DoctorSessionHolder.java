@@ -15,6 +15,7 @@ public class DoctorSessionHolder extends RecyclerView.ViewHolder {
     public TextView appointmentsCount;
     public LinearLayout cardview_item, transation_layout;
     public CardView cardView;
+    public CardView cardview_appointmentcount;
     public DoctorSessionHolder(@NonNull View itemView) {
         super(itemView);
         tv_session_id = itemView.findViewById(R.id.tv_session_id);
@@ -28,6 +29,7 @@ public class DoctorSessionHolder extends RecyclerView.ViewHolder {
         cardview_item = itemView.findViewById(R.id.cardview_item);
         transation_layout = itemView.findViewById(R.id.id_layout);
         cardView = itemView.findViewById(R.id.id_card_item1);
+        cardview_appointmentcount = itemView.findViewById(R.id.cardview_appointmentcount);
         appointmentsCount = itemView.findViewById(R.id.appointmentsCount);
 
 

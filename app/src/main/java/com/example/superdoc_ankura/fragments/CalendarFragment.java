@@ -44,6 +44,7 @@ import com.example.superdoc_ankura.pojos.response.ListOfTotalCountsWithDatesResp
 import com.example.superdoc_ankura.pojos.response.ListOfTotalCountsWithDatesResponse2;
 import com.example.superdoc_ankura.pojos.response.MarkLeaveResponse;
 import com.example.superdoc_ankura.utils.BaseActivity;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,7 +58,7 @@ import retrofit2.Response;
 public class CalendarFragment extends android.support.v4.app.Fragment {
     CalendarView calendarView;
     ImageView notification;
-    ImageView markLeave;
+    LinearLayout markLeave;
     RecyclerView rview;
     Dialog dialog1, dialog2, dialog3;
     List<String> appointmentCount;
@@ -70,13 +71,15 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
     TextView doctorName, doctorSpeciality, doctorStudies;
     List<Calendar> selectedDates;
     TextInputEditText text_reason;
+     ShimmerFrameLayout mShimmerViewContainer;
+
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.calendar_fragment, container, false);
-
+        mShimmerViewContainer = view.findViewById(R.id.shimmer_view_container);
         notification = view.findViewById(R.id.notification);
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +104,7 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
         rview.setLayoutManager(linearLayoutManager);
         rview.setHasFixedSize(true);
         calendarView = view.findViewById(R.id.calendarView);
+        
 
 
         cal = Calendar.getInstance();
@@ -109,38 +113,63 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
         markLeave = view.findViewById(R.id.imageMarkLeave);
         events = new ArrayList<>();
         appointmentCount = new ArrayList<>();
+        mShimmerViewContainer.startShimmerAnimation();
         Call<ArrayList<ListOfTotalCountsWithDatesResponse2>> call = BaseActivity.getInstance().serviceCalls.getListOfTotalCountsWithDates(BaseActivity.getInstance().sessionManager.getDOCTORID());
         call.enqueue(new Callback<ArrayList<ListOfTotalCountsWithDatesResponse2>>() {
             @Override
             public void onResponse(Call<ArrayList<ListOfTotalCountsWithDatesResponse2>> call, Response<ArrayList<ListOfTotalCountsWithDatesResponse2>> response) {
+                mShimmerViewContainer.stopShimmerAnimation();
                 if (response.code() == 200) {
                     ArrayList<ListOfTotalCountsWithDatesResponse2> listOfTotalCountsWithDatesResponses = response.body();
-                    for (int i = 0; i < listOfTotalCountsWithDatesResponses.size(); i++) {
+                    if (listOfTotalCountsWithDatesResponses.size() == 0) {
+                        //showCustomDialog();
+                        BaseActivity.getInstance().showToast("No Events Found");
+                        cal = Calendar.getInstance();
+                        calendarView.setMinimumDate(cal);
+                    } else {
+                        for (int i = 0; i < listOfTotalCountsWithDatesResponses.size(); i++) {
 
-                        String dateStr = listOfTotalCountsWithDatesResponses.get(i).getDate();
+                            String dateStr = listOfTotalCountsWithDatesResponses.get(i).getDate();
 
-                        String[] dateParts = dateStr.split("-");
-                        String year = dateParts[0];
-                        String month = dateParts[1];
-                        String day = dateParts[2];
+                            String[] dateParts = dateStr.split("-");
+                            String year = dateParts[0];
+                            String month = dateParts[1];
+                            String day = dateParts[2];
 
-                        Log.d("currentDate", year + month + day);
+                            Log.d("currentDate", year + month + day);
 
-                        int count = listOfTotalCountsWithDatesResponses.get(i).getAppointmentsCount();
+                            int count = listOfTotalCountsWithDatesResponses.get(i).getAppointmentsCount();
 
-                        cal.set(Integer.parseInt(year), Integer.parseInt(month) - 1, Integer.parseInt(day));
-                        // cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day));
-                        events.add(new EventDay(cal, DrawableUtils.getCircleDrawableWithText(getActivity(), String.valueOf(count))));
-                        calendarView.setEvents(events);
+                            cal.set(Integer.parseInt(year), Integer.parseInt(month) - 1, Integer.parseInt(day));
+                            // cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day));
+                            events.add(new EventDay(cal, DrawableUtils.getCircleDrawableWithText(getActivity(), String.valueOf(count))));
 
+                                calendarView.setEvents(events);
+
+                        }
                     }
+
                 } else if (response.code() == 204) {
-                    BaseActivity.getInstance().showToast("No Counts Found");
+                    cal = Calendar.getInstance();
+                    calendarView.setMinimumDate(cal);
+                    BaseActivity.getInstance().showToast("No Events Found");
+//                    showCustomDialog();
                 }
+            }
+
+            private void showCustomDialog() {
+                LayoutInflater inflater = (LayoutInflater) getLayoutInflater();
+                View customView = inflater.inflate(R.layout.no_events_screen, null);
+                dialog1 = new Dialog(getActivity(), R.style.MarkLeaveDialogTheme);
+                dialog1.setContentView(customView);
+                dialog1.setCancelable(true);
+
+                dialog1.show();
             }
 
             @Override
             public void onFailure(Call<ArrayList<ListOfTotalCountsWithDatesResponse2>> call, Throwable t) {
+                mShimmerViewContainer.stopShimmerAnimation();
                 BaseActivity.getInstance().showAlertDialog(t.getMessage());
             }
         });
@@ -155,10 +184,12 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
 
                 Call<ArrayList<ListOfSessionsUsingDateResponse>> call2 = BaseActivity.getInstance().serviceCalls.getListOfSessionsByDate(
                         BaseActivity.getInstance().sessionManager.getDOCTORID(), selectedDate);
+                mShimmerViewContainer.startShimmerAnimation();
                 Log.d("requestdata", BaseActivity.getInstance().sessionManager.getDOCTORID() + "\n" + selectedDate);
                 call2.enqueue(new Callback<ArrayList<ListOfSessionsUsingDateResponse>>() {
                     @Override
                     public void onResponse(Call<ArrayList<ListOfSessionsUsingDateResponse>> call, Response<ArrayList<ListOfSessionsUsingDateResponse>> response) {
+                        mShimmerViewContainer.stopShimmerAnimation();
                         if (response.code() == 200) {
                             ArrayList<ListOfSessionsUsingDateResponse> listOfSessionsUsingDateResponses = response.body();
                             if (listOfSessionsUsingDateResponses.size() == 0) {
@@ -179,7 +210,8 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
 
                     @Override
                     public void onFailure(Call<ArrayList<ListOfSessionsUsingDateResponse>> call, Throwable t) {
-
+                        mShimmerViewContainer.stopShimmerAnimation();
+                        BaseActivity.getInstance().showAlertDialog(t.getMessage());
                     }
                 });
 
@@ -202,7 +234,8 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
                 tvLeaveDays = dialog1.findViewById(R.id.tv_leave_days);
                 tvSessions = dialog1.findViewById(R.id.tv_sessions);
                 tvReason = dialog1.findViewById(R.id.tv_reason);
-
+                ShimmerFrameLayout mShimmerViewContainer2;
+                mShimmerViewContainer2 = dialog1.findViewById(R.id.shimmer_view_container);
                 textSelect.setTypeface(BaseActivity.getInstance().faceRegular);
                 tvLeaveDays.setTypeface(BaseActivity.getInstance().faceRegular);
                 tvSessions.setTypeface(BaseActivity.getInstance().faceRegular);
@@ -268,9 +301,11 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
                                     new ListOfSessionsBySelectedDatesRequest(BaseActivity.getInstance().sessionManager.getDOCTORID(), listOfDates);
                             Call<ArrayList<ListOfSessionsBySelectedDatesResponse>> call = BaseActivity.getInstance().
                                     serviceCalls.getListOfSessionsBySelectedDates(listOfSessionsBySelectedDatesRequest);
+                            mShimmerViewContainer2.startShimmerAnimation();
                             call.enqueue(new Callback<ArrayList<ListOfSessionsBySelectedDatesResponse>>() {
                                 @Override
                                 public void onResponse(Call<ArrayList<ListOfSessionsBySelectedDatesResponse>> call, Response<ArrayList<ListOfSessionsBySelectedDatesResponse>> response) {
+                                    mShimmerViewContainer2.stopShimmerAnimation();
                                     if (response.code() == 200) {
                                         ArrayList<ListOfSessionsBySelectedDatesResponse> listOfSessionsBySelectedDatesResponseArrayList = response.body();
                                         if (listOfSessionsBySelectedDatesResponseArrayList.size() == 0) {
@@ -293,6 +328,7 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
 
                                 @Override
                                 public void onFailure(Call<ArrayList<ListOfSessionsBySelectedDatesResponse>> call, Throwable t) {
+                                    mShimmerViewContainer2.stopShimmerAnimation();
                                     BaseActivity.getInstance().showAlertDialog(t.getMessage());
                                 }
                             });
@@ -353,12 +389,15 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
                 tvLeaveDays.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         tvLeaveDays.setBackgroundResource(R.drawable.tv_bottom_line_dark);
                         tvSessions.setBackgroundResource(R.drawable.tv_bottom_line_light);
                         tvReason.setBackgroundResource(R.drawable.tv_bottom_line_light);
+
                         layoutLeaveDays.setVisibility(View.VISIBLE);
                         layoutSessions.setVisibility(View.GONE);
                         layoutReason.setVisibility(View.GONE);
+
                     }
                 });
                 tvSessions.setOnClickListener(new View.OnClickListener() {
@@ -391,9 +430,11 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
                                     new ListOfSessionsBySelectedDatesRequest(BaseActivity.getInstance().sessionManager.getDOCTORID(), listOfDates);
                             Call<ArrayList<ListOfSessionsBySelectedDatesResponse>> call = BaseActivity.getInstance().
                                     serviceCalls.getListOfSessionsBySelectedDates(listOfSessionsBySelectedDatesRequest);
+                            mShimmerViewContainer2.startShimmerAnimation();
                             call.enqueue(new Callback<ArrayList<ListOfSessionsBySelectedDatesResponse>>() {
                                 @Override
                                 public void onResponse(Call<ArrayList<ListOfSessionsBySelectedDatesResponse>> call, Response<ArrayList<ListOfSessionsBySelectedDatesResponse>> response) {
+                                    mShimmerViewContainer2.stopShimmerAnimation();
                                     if (response.code() == 200) {
                                         ArrayList<ListOfSessionsBySelectedDatesResponse> listOfSessionsBySelectedDatesResponseArrayList = response.body();
                                         if (listOfSessionsBySelectedDatesResponseArrayList.size() == 0) {
@@ -414,6 +455,7 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
 
                                 @Override
                                 public void onFailure(Call<ArrayList<ListOfSessionsBySelectedDatesResponse>> call, Throwable t) {
+                                    mShimmerViewContainer2.stopShimmerAnimation();
                                     BaseActivity.getInstance().showAlertDialog(t.getMessage());
                                 }
                             });
@@ -425,22 +467,26 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
                 tvReason.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        try {
+                            if (ListOfSessionsBySelectedDatesAdapter.getInstance().sessionIdsList.size() == 0) {
+                                BaseActivity.getInstance().showToast("please select sessions");
+                            } else {
+                                layoutSessions.setVisibility(View.GONE);
+                                layoutReason.setVisibility(View.VISIBLE);
+                                layoutLeaveDays.setVisibility(View.GONE);
+                                tvLeaveDays.setBackgroundResource(R.drawable.tv_bottom_line_light);
+                                tvSessions.setBackgroundResource(R.drawable.tv_bottom_line_light);
+                                tvReason.setBackgroundResource(R.drawable.tv_bottom_line_dark);
 
-                        if (ListOfSessionsBySelectedDatesAdapter.getInstance().sessionIdsList.size() == 0) {
-                            BaseActivity.getInstance().showToast("please select sessions");
-                        } else {
-                            layoutSessions.setVisibility(View.GONE);
-                            layoutReason.setVisibility(View.VISIBLE);
-                            layoutLeaveDays.setVisibility(View.GONE);
-                            tvLeaveDays.setBackgroundResource(R.drawable.tv_bottom_line_light);
-                            tvSessions.setBackgroundResource(R.drawable.tv_bottom_line_light);
-                            tvReason.setBackgroundResource(R.drawable.tv_bottom_line_dark);
+                                //sessionIdsList.addAll(ListOfSessionsBySelectedDatesAdapter.getInstance().sessionIdsList);
+                                sessionIdsList = ListOfSessionsBySelectedDatesAdapter.getInstance().sessionIdsList;
+                                Log.d("sessionids", sessionIdsList.toString());
 
-                            //sessionIdsList.addAll(ListOfSessionsBySelectedDatesAdapter.getInstance().sessionIdsList);
-                            sessionIdsList = ListOfSessionsBySelectedDatesAdapter.getInstance().sessionIdsList;
-                            Log.d("sessionids", sessionIdsList.toString());
-
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
+
                     }
                 });
             }
@@ -451,12 +497,14 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
                         text_reason.getText().toString(), sessionIdsList, listOfDates);
                 Log.d("markleaverequest", markLeaveRequest.toString());
                 Call<MarkLeaveResponse> call = BaseActivity.getInstance().serviceCalls.doMarkLeave(markLeaveRequest);
+                mShimmerViewContainer.startShimmerAnimation();
                 call.enqueue(new Callback<MarkLeaveResponse>() {
                     @Override
                     public void onResponse(Call<MarkLeaveResponse> call, Response<MarkLeaveResponse> response) {
+                        mShimmerViewContainer.stopShimmerAnimation();
                         if (response.code() == 200) {
                             dialog1.dismiss();
-                            BaseActivity.getInstance().showAlertDialog("Approved Successfully");
+                            BaseActivity.getInstance().showToast(response.body().getMsg());
                         } else if (response.code() == 204) {
                             BaseActivity.getInstance().showToast("failed");
                         }
@@ -465,6 +513,7 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
 
                     @Override
                     public void onFailure(Call<MarkLeaveResponse> call, Throwable t) {
+                        mShimmerViewContainer.stopShimmerAnimation();
                         BaseActivity.getInstance().showAlertDialog(t.getMessage());
                     }
                 });

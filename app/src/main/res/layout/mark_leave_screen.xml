@@ -81,9 +81,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:forwardButtonSrc="@drawable/rightarrow"
+                android:theme="@style/CalendarWidgetHeader"
                 app:headerColor="#ffffff"
                 app:headerLabelColor="#000000"
-                app:previousButtonSrc="@drawable/ic_keyboard_arrow_left_black_24dp"
+                app:previousButtonSrc="@drawable/ic_keyboard_arrow_left_blue_24dp"
                 app:type="many_days_picker" />
         </LinearLayout>
 
@@ -98,7 +99,6 @@
                 android:layout_height="34dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="15dp"
-                app:cardBackgroundColor="#14BBD3"
                 app:cardCornerRadius="17dp">
 
                 <LinearLayout
@@ -109,7 +109,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_arrow_right" />
+                        android:src="@drawable/login_button" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>
@@ -123,12 +123,21 @@
         android:orientation="vertical"
         android:visibility="gone">
 
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_view_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7.5"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            app:duration="800">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rview"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_margin="10dp"
-            android:layout_weight="7.5" />
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"/>
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

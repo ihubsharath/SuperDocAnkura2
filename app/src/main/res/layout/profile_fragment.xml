@@ -31,7 +31,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/doc_profile" />
+                        android:src="@drawable/doctor_profile" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>
@@ -59,9 +59,9 @@
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_weight="2"
-                    android:layout_height="20dp"
+                    android:layout_height="@dimen/_10sdp"
                     android:gravity="right"
-                    android:src="@drawable/ic_edit_white_24dp"/>
+                    android:src="@drawable/edit"/>
             </LinearLayout>
 
             <View
@@ -97,9 +97,9 @@
 
             <ImageView
                 android:id="@+id/notification"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_notifications_white_24dp" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/notification_icon" />
         </LinearLayout>
     </LinearLayout>
 
@@ -107,11 +107,11 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="50dp"
-        app:cardElevation="5dp"
-        app:cardCornerRadius="10dp">
+        android:layout_marginLeft="@dimen/_20sdp"
+        android:layout_marginRight="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_40sdp"
+        app:cardElevation="@dimen/_5sdp"
+        app:cardCornerRadius="@dimen/_10sdp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -125,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:text="Notification Settings"
                 android:padding="5dp"
-                android:drawableRight="@drawable/rightarrow"
+                android:drawableRight="@drawable/ic_keyboard_arrow_right_grey_24dp"
                 android:textColor="#707070" />
             <TextView
                 android:id="@+id/textChangePassword"
@@ -133,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:text="Change Password"
                 android:padding="5dp"
-                android:drawableRight="@drawable/rightarrow"
+                android:drawableRight="@drawable/ic_keyboard_arrow_right_grey_24dp"
                 android:textColor="#707070" />
             <TextView
                 android:id="@+id/textMarkFollowUp"
@@ -141,18 +141,18 @@
                 android:layout_height="wrap_content"
                 android:text="Mark FollowUp/Leave/Delay"
                 android:padding="5dp"
-                android:drawableRight="@drawable/rightarrow"
+                android:drawableRight="@drawable/ic_keyboard_arrow_right_grey_24dp"
                 android:textColor="#707070" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="30dp"
-        app:cardElevation="5dp"
-        app:cardCornerRadius="10dp">
+        android:layout_marginLeft="@dimen/_20sdp"
+        android:layout_marginRight="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:cardElevation="@dimen/_5sdp"
+        app:cardCornerRadius="@dimen/_10sdp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -166,7 +166,7 @@
                 android:layout_height="wrap_content"
                 android:text="Reports"
                 android:padding="5dp"
-                android:drawableRight="@drawable/rightarrow"
+                android:drawableRight="@drawable/ic_keyboard_arrow_right_grey_24dp"
                 android:textColor="#707070" />
             <TextView
                 android:id="@+id/textAddClinic"
@@ -174,7 +174,7 @@
                 android:layout_height="wrap_content"
                 android:text="Add Clinic"
                 android:padding="5dp"
-                android:drawableRight="@drawable/rightarrow"
+                android:drawableRight="@drawable/ic_keyboard_arrow_right_grey_24dp"
                 android:textColor="#707070" />
             <TextView
                 android:id="@+id/textInvite"
@@ -182,7 +182,7 @@
                 android:layout_height="wrap_content"
                 android:text="Invite"
                 android:padding="5dp"
-                android:drawableRight="@drawable/rightarrow"
+                android:drawableRight="@drawable/ic_keyboard_arrow_right_grey_24dp"
                 android:textColor="#707070" />
             <TextView
                 android:id="@+id/textContactSupport"
@@ -190,7 +190,7 @@
                 android:layout_height="wrap_content"
                 android:text="Contact Support"
                 android:padding="5dp"
-                android:drawableRight="@drawable/rightarrow"
+                android:drawableRight="@drawable/ic_keyboard_arrow_right_grey_24dp"
                 android:textColor="#707070" />
         </LinearLayout>
     </android.support.v7.widget.CardView>

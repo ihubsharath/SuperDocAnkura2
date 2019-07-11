@@ -66,4 +66,7 @@
     <string name="material_calendar_positive_button">OK</string>
     <string name="material_calendar_negative_button">Cancel</string>
 
+
+    <string name="font">assets/Montserrat-Bold.otf</string>
+    <string name="font2">assets/Montserrat-Regular.otf</string>
 </resources>

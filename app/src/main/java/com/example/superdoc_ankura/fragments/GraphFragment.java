@@ -19,6 +19,7 @@ import com.example.superdoc_ankura.R;
 import com.example.superdoc_ankura.activities.AllAppointmentsActivity;
 import com.example.superdoc_ankura.pojos.response.AllCountsResponse;
 import com.example.superdoc_ankura.utils.BaseActivity;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
@@ -47,13 +48,16 @@ public class GraphFragment extends Fragment {
     Animation animation;
     PieChart pieChart;
     ArrayList<Integer> colors;
-    int oldAppts, newAppts, allAppts, walkinAppts, noshowAppts, cancelAppts;
+    int oldAppts, newAppts, allAppts, walkinAppts, noshowAppts, cancelAppts, checkinAppts;
+    String avgWaitingTime, avgConsultationTime;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.graph_fragment, container, false);
+
         tvSummary = view.findViewById(R.id.tv_summary);
         tvHospitalName = view.findViewById(R.id.tv_hospital_name);
         tvTime = view.findViewById(R.id.tv_from_to_time);
@@ -95,8 +99,6 @@ public class GraphFragment extends Fragment {
         tvAvgWaitTimeText.setTypeface(BaseActivity.getInstance().faceRegular);
         tvConsultationDurationText.setTypeface(BaseActivity.getInstance().faceRegular);
 
-        tvAvgWaitTime.setTypeface(((BaseActivity) getActivity()).faceBold);
-        tvConsultationDuration.setTypeface(((BaseActivity) getActivity()).faceBold);
         getAllCounts();
 
 
@@ -106,20 +108,23 @@ public class GraphFragment extends Fragment {
     private void getAllCounts() {
         Call<AllCountsResponse> call = BaseActivity.getInstance().serviceCalls.getAllCounts(BaseActivity.getInstance().sessionManager.getDOCTORID(),
                 AllAppointmentsActivity.getInstance().sessionId);
-
         call.enqueue(new Callback<AllCountsResponse>() {
             @Override
             public void onResponse(Call<AllCountsResponse> call, Response<AllCountsResponse> response) {
-                if (response.code() == 200){
+
+                if (response.code() == 200) {
                     AllCountsResponse allCountsResponse = response.body();
 
                     oldAppts = allCountsResponse.getOldCount();
                     newAppts = allCountsResponse.getNewCount();
 
                     allAppts = allCountsResponse.getAllCount();
-                    walkinAppts = allCountsResponse.getCheckinCount();
+                    walkinAppts = allCountsResponse.getWalkIn();
                     cancelAppts = allCountsResponse.getCancelCount();
                     noshowAppts = allCountsResponse.getNoShowCount();
+
+                    avgWaitingTime = allCountsResponse.getAvgWaitingTime();
+                    avgConsultationTime = allCountsResponse.getAvgConsultationTime();
 
 
                     valueOne.setText(String.valueOf(allAppts));
@@ -128,15 +133,11 @@ public class GraphFragment extends Fragment {
                     valueFour.setText(String.valueOf(noshowAppts));
 
 
-
                     float[] yData = {newAppts, oldAppts};
-
 
 
                     animation = AnimationUtils.loadAnimation(getActivity(),
                             R.anim.slide_in_bottom_graph);
-
-
 
 
                     //apptmts = 10,
@@ -182,6 +183,10 @@ public class GraphFragment extends Fragment {
 
 
                     //PIE CHART
+                    tvAvgWaitTime.setText(String.valueOf(avgWaitingTime) + " mins");
+                    tvConsultationDuration.setText(String.valueOf(avgConsultationTime) + " mins");
+
+
                     int colorOld = Color.parseColor("#2F7FAC");
                     int colorNew = Color.parseColor("#14BBD3");
 
@@ -233,8 +238,7 @@ public class GraphFragment extends Fragment {
                     pieChart.invalidate();
 
 
-
-                }else if (response.code()==204){
+                } else if (response.code() == 204) {
                     BaseActivity.getInstance().showToast("failed");
                 }
 
@@ -243,6 +247,7 @@ public class GraphFragment extends Fragment {
             @Override
             public void onFailure(Call<AllCountsResponse> call, Throwable t) {
 
+                BaseActivity.getInstance().showAlertDialog(t.getMessage());
             }
         });
     }

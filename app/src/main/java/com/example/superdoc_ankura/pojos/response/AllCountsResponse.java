@@ -3,12 +3,15 @@ package com.example.superdoc_ankura.pojos.response;
 public class AllCountsResponse {
 
     /**
-     * allCount : 10
-     * checkinCount : 0
+     * allCount : 29
+     * checkinCount : 19
      * noShowCount : 0
-     * cancelCount : 1
+     * cancelCount : 2
      * newCount : 0
-     * oldCount : 10
+     * oldCount : 29
+     * walkIn : 3
+     * avgWaitingTime : 0.4827586206896552
+     * avgConsultationTime : 0.0
      */
 
     private int allCount;
@@ -17,6 +20,9 @@ public class AllCountsResponse {
     private int cancelCount;
     private int newCount;
     private int oldCount;
+    private int walkIn;
+    private String avgWaitingTime;
+    private String avgConsultationTime;
 
     public int getAllCount() {
         return allCount;
@@ -66,6 +72,30 @@ public class AllCountsResponse {
         this.oldCount = oldCount;
     }
 
+    public int getWalkIn() {
+        return walkIn;
+    }
+
+    public void setWalkIn(int walkIn) {
+        this.walkIn = walkIn;
+    }
+
+    public String getAvgWaitingTime() {
+        return avgWaitingTime;
+    }
+
+    public void setAvgWaitingTime(String avgWaitingTime) {
+        this.avgWaitingTime = avgWaitingTime;
+    }
+
+    public String getAvgConsultationTime() {
+        return avgConsultationTime;
+    }
+
+    public void setAvgConsultationTime(String avgConsultationTime) {
+        this.avgConsultationTime = avgConsultationTime;
+    }
+
     @Override
     public String toString() {
         return "AllCountsResponse{" +
@@ -75,6 +105,9 @@ public class AllCountsResponse {
                 ", cancelCount=" + cancelCount +
                 ", newCount=" + newCount +
                 ", oldCount=" + oldCount +
+                ", walkIn=" + walkIn +
+                ", avgWaitingTime='" + avgWaitingTime + '\'' +
+                ", avgConsultationTime='" + avgConsultationTime + '\'' +
                 '}';
     }
 }

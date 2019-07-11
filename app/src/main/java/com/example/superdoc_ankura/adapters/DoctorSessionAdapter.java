@@ -3,6 +3,7 @@ package com.example.superdoc_ankura.adapters;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
@@ -38,15 +39,18 @@ public class DoctorSessionAdapter extends RecyclerView.Adapter<DoctorSessionHold
         LayoutInflater inflater = LayoutInflater.from(doctorSessionActivity);
         View view = inflater.inflate(R.layout.doctor_session_itemview, viewGroup, false);
         DoctorSessionHolder holder = new DoctorSessionHolder(view);
-
+        //holder.cardview_item.setVisibility(View.VISIBLE);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull final DoctorSessionHolder holder, final int i) {
+
+
         holder.tv_session_id.setText(String.valueOf(doctorSessionResponses.get(i).getDoctorSessionId()));
         holder.tvHospitalName.setText(doctorSessionResponses.get(i).getOrganizationName());
         holder.tvFromToTime.setText(doctorSessionResponses.get(i).getSessionTime());
+        holder.cardview_appointmentcount.setVisibility(View.VISIBLE);
         holder.appointmentsCount.setText(String.valueOf(doctorSessionResponses.get(i).getTodayAppointmentsCount()));
 
         ViewCompat.setTransitionName(holder.cardView, doctorSessionResponses.get(i).getOrganizationName());
@@ -57,8 +61,15 @@ public class DoctorSessionAdapter extends RecyclerView.Adapter<DoctorSessionHold
             public void onClick(View v) {
 //                Intent i = new Intent(doctorSessionActivity, AllAppointmentsActivity.class);
 //                doctorSessionActivity.startActivity(i);
+               holder.cardview_appointmentcount.setVisibility(View.GONE);
 
-
+//                final Handler handler = new Handler();
+//               handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        holder.cardview_item.setVisibility(View.GONE);
+//                    }
+//                }, 500);
                 Intent intent = new Intent(doctorSessionActivity, AllAppointmentsActivity.class);
 
                 intent.putExtra("sessionid",String.valueOf(doctorSessionResponses.get(i).getDoctorSessionId()));
@@ -81,6 +92,13 @@ public class DoctorSessionAdapter extends RecyclerView.Adapter<DoctorSessionHold
 
 //                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(doctorSessionActivity, pairs);
                 ActivityCompat.startActivity(doctorSessionActivity, intent, options.toBundle());
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        holder.cardview_appointmentcount.setVisibility(View.VISIBLE);
+                    }
+                }, 500);
 
 
 
