@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -108,7 +109,9 @@ public class AllAppointmentsActivity extends BaseActivity {
     ShimmerFrameLayout mShimmerViewContainer;
     private TextView noSlotsFound;
     LinearLayout no_checkin_appointments_view, no_noshow_appointments_view, no_cancel_appointments_view, no_all_appointments_view;
-
+    ImageView circle, circle2, circle3, circle4;
+    Animation blinkzoomin, blinkzoomin2, blinkzoomin3, blinkzoomin4;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +120,7 @@ public class AllAppointmentsActivity extends BaseActivity {
         allAppointmentsActivity = this;
 
         mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
-
+        handler = new Handler();
         no_checkin_appointments_view = findViewById(R.id.no_checkin_appointments_view);
         no_noshow_appointments_view = findViewById(R.id.no_noshow_appointments_view);
         no_cancel_appointments_view = findViewById(R.id.no_cancel_appointments_view);
@@ -159,11 +162,57 @@ public class AllAppointmentsActivity extends BaseActivity {
         });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
+//        circle = findViewById(R.id.circle);
+//        circle2 = findViewById(R.id.circle2);
+//        circle3 = findViewById(R.id.circle3);
+//        circle4 = findViewById(R.id.circle4);
+
+//        blinkzoomin = AnimationUtils.loadAnimation(getApplicationContext(),
+//                R.anim.blinkzoomin);
+//        // blinkzoomin.setInterpolator(this, android.R.anim.accelerate_interpolator);
+//        blinkzoomin2 = AnimationUtils.loadAnimation(getApplicationContext(),
+//                R.anim.blinkzoomin2);
+//        //blinkzoomin2.setInterpolator(this, android.R.anim.accelerate_interpolator);
+//        blinkzoomin3 = AnimationUtils.loadAnimation(getApplicationContext(),
+//                R.anim.blinkzoomin3);
+//        //blinkzoomin3.setInterpolator(this, android.R.anim.accelerate_interpolator);
+//        blinkzoomin4 = AnimationUtils.loadAnimation(getApplicationContext(),
+//                R.anim.blinkzoomin4);
+        //blinkzoomin4.setInterpolator(this, android.R.anim.accelerate_interpolator);
+
+//        circle.setAnimation(blinkzoomin);
+//
+//
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                Log.d("sharath","sharath");
+//                circle2.setAnimation(blinkzoomin2);
+//                Handler handler = new Handler();
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Log.d("sharath","sharath");
+//                        circle3.setAnimation(blinkzoomin3);
+//                        handler.postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                Log.d("sharath","sharath");
+//                                circle4.setAnimation(blinkzoomin4);
+//
+//                            }
+//                        },600);
+//
+//                    }
+//                },600);
+//            }
+//        },600);
+
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
 
             }
         });

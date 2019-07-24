@@ -66,8 +66,8 @@ public class MainActivity extends BaseActivity {
                 float pageWidthTimesPosition = pageWidth * position;
                 float absPosition = Math.abs(position);
                final View image1, image2;
-                image1 = page.findViewById(R.id.screenoneimage);
-                image2 = page.findViewById(R.id.screenoneimage2);
+                image1 = page.findViewById(R.id.imageOne);
+                image2 = page.findViewById(R.id.imageTwo);
 
                 image1.setAlpha(1.0f - absPosition);
                 image1.setTranslationX(pageWidthTimesPosition / 2f);
