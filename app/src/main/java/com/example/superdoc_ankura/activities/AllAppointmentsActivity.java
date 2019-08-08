@@ -1217,7 +1217,7 @@ public class AllAppointmentsActivity extends BaseActivity {
                             public boolean onQueryTextSubmit(String query) {
                                 return false;
                             }
-
+//this is new line
                             @Override
                             public boolean onQueryTextChange(String newText) {
                                 try {
