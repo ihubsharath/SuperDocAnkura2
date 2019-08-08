@@ -2,6 +2,7 @@ package com.example.superdoc_ankura.activities;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -109,9 +110,12 @@ public class AllAppointmentsActivity extends BaseActivity {
     ShimmerFrameLayout mShimmerViewContainer;
     private TextView noSlotsFound;
     LinearLayout no_checkin_appointments_view, no_noshow_appointments_view, no_cancel_appointments_view, no_all_appointments_view;
-    ImageView circle, circle2, circle3, circle4;
-    Animation blinkzoomin, blinkzoomin2, blinkzoomin3, blinkzoomin4;
-    private Handler handler;
+    private FloatingActionButton fab, fabBack;
+    private Handler customHandler, handler2,handler3;
+    private Animation animation1, animation2, blinkzoomin;
+    int count = 0;
+    private int i = 1;
+    boolean flag = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +124,7 @@ public class AllAppointmentsActivity extends BaseActivity {
         allAppointmentsActivity = this;
 
         mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
-        handler = new Handler();
+
         no_checkin_appointments_view = findViewById(R.id.no_checkin_appointments_view);
         no_noshow_appointments_view = findViewById(R.id.no_noshow_appointments_view);
         no_cancel_appointments_view = findViewById(R.id.no_cancel_appointments_view);
@@ -161,58 +165,45 @@ public class AllAppointmentsActivity extends BaseActivity {
 
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        animation1 = AnimationUtils.loadAnimation(AllAppointmentsActivity.this, R.anim.zoomin);
+        blinkzoomin = AnimationUtils.loadAnimation(AllAppointmentsActivity.this, R.anim.blinkzoomin);
+        animation2 = AnimationUtils.loadAnimation(AllAppointmentsActivity.this, R.anim.zoomout);
+
         fab = findViewById(R.id.fab);
-//        circle = findViewById(R.id.circle);
-//        circle2 = findViewById(R.id.circle2);
-//        circle3 = findViewById(R.id.circle3);
-//        circle4 = findViewById(R.id.circle4);
 
-//        blinkzoomin = AnimationUtils.loadAnimation(getApplicationContext(),
-//                R.anim.blinkzoomin);
-//        // blinkzoomin.setInterpolator(this, android.R.anim.accelerate_interpolator);
-//        blinkzoomin2 = AnimationUtils.loadAnimation(getApplicationContext(),
-//                R.anim.blinkzoomin2);
-//        //blinkzoomin2.setInterpolator(this, android.R.anim.accelerate_interpolator);
-//        blinkzoomin3 = AnimationUtils.loadAnimation(getApplicationContext(),
-//                R.anim.blinkzoomin3);
-//        //blinkzoomin3.setInterpolator(this, android.R.anim.accelerate_interpolator);
-//        blinkzoomin4 = AnimationUtils.loadAnimation(getApplicationContext(),
-//                R.anim.blinkzoomin4);
-        //blinkzoomin4.setInterpolator(this, android.R.anim.accelerate_interpolator);
-
-//        circle.setAnimation(blinkzoomin);
-//
-//
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                Log.d("sharath","sharath");
-//                circle2.setAnimation(blinkzoomin2);
-//                Handler handler = new Handler();
-//                handler.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Log.d("sharath","sharath");
-//                        circle3.setAnimation(blinkzoomin3);
-//                        handler.postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                Log.d("sharath","sharath");
-//                                circle4.setAnimation(blinkzoomin4);
-//
-//                            }
-//                        },600);
-//
-//                    }
-//                },600);
-//            }
-//        },600);
-
-
+        fabBack = findViewById(R.id.fabBack);
+        customHandler = new Handler();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if (flag) {
+                    customHandler.postDelayed(updateTimerThread, 0);
+                    fab.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.colorPrimaryDark));
+                    flag = false;
+                    Handler handlerStop = new Handler();
+                    handlerStop.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            customHandler.removeCallbacks(updateTimerThread);
+                            fab.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(),R.color.white));
+                            flag = true;
+                            count = 0;
+                        }
+                    },9500);
+                }
+
+
+
+//                if (flag) {
+//                    customHandler.postDelayed(updateTimerThread, 0);
+//                    fab.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.colorPrimaryDark));
+//                    flag = false;
+//                }else if (!flag){
+//                    fab.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(),R.color.white));
+//                    flag = true;
+//                }
+
 
             }
         });
@@ -327,7 +318,7 @@ public class AllAppointmentsActivity extends BaseActivity {
                 View customView = inflater.inflate(R.layout.delay_dialog_popup_2, null);
 
 
-                dialog = new Dialog(AllAppointmentsActivity.this,R.style.CustomDialogTheme);
+                dialog = new Dialog(AllAppointmentsActivity.this, R.style.CustomDialogTheme);
                 dialog.setContentView(customView);
                 LinearLayout custom_dialog_root_layout = dialog.findViewById(R.id.custom_dialog);
 //custom_dialog_root_layout.setAnimation(animation);
@@ -895,7 +886,7 @@ public class AllAppointmentsActivity extends BaseActivity {
         checkinAppointments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Animation noshow_animation = AnimationUtils.loadAnimation(AllAppointmentsActivity.this,R.anim.slide_up);
+                Animation noshow_animation = AnimationUtils.loadAnimation(AllAppointmentsActivity.this, R.anim.slide_up);
                 checkinAppointments.setAnimation(noshow_animation);
                 allAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
                 checkinAppointments.setBackgroundResource(R.drawable.tv_bottom_line_dark);
@@ -909,7 +900,7 @@ public class AllAppointmentsActivity extends BaseActivity {
         noshowAppointments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Animation noshow_animation = AnimationUtils.loadAnimation(AllAppointmentsActivity.this,R.anim.slide_up);
+                Animation noshow_animation = AnimationUtils.loadAnimation(AllAppointmentsActivity.this, R.anim.slide_up);
                 noshowAppointments.setAnimation(noshow_animation);
                 allAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
                 checkinAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
@@ -923,7 +914,7 @@ public class AllAppointmentsActivity extends BaseActivity {
         cancelAppointments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Animation noshow_animation = AnimationUtils.loadAnimation(AllAppointmentsActivity.this,R.anim.slide_up);
+                Animation noshow_animation = AnimationUtils.loadAnimation(AllAppointmentsActivity.this, R.anim.slide_up);
                 cancelAppointments.setAnimation(noshow_animation);
                 allAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
                 checkinAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
@@ -938,7 +929,7 @@ public class AllAppointmentsActivity extends BaseActivity {
         allAppointments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Animation noshow_animation = AnimationUtils.loadAnimation(AllAppointmentsActivity.this,R.anim.slide_up);
+                Animation noshow_animation = AnimationUtils.loadAnimation(AllAppointmentsActivity.this, R.anim.slide_up);
                 allAppointments.setAnimation(noshow_animation);
                 allAppointments.setBackgroundResource(R.drawable.tv_bottom_line_dark);
                 checkinAppointments.setBackgroundResource(R.drawable.tv_bottom_line_light);
@@ -953,6 +944,39 @@ public class AllAppointmentsActivity extends BaseActivity {
 
     }
 
+    Runnable updateTimerThread = new Runnable() {
+        public void run() {
+            i++;
+             handler2 = new Handler();
+            if (count < 9) {
+                handler2.postDelayed(repeatTwoTimes, 0);
+                if (count % 3 == 0) {
+                    fabBack.startAnimation(blinkzoomin);
+                }
+                if (count == 8) {
+                    fab.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.white));
+                }
+            }
+            customHandler.postDelayed(updateTimerThread, 1000);
+        }
+
+    };
+    Runnable repeatTwoTimes = new Runnable() {
+        @Override
+        public void run() {
+            count++;
+            fab.startAnimation(animation1);
+             handler3 = new Handler();
+            handler3.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    fab.startAnimation(animation2);
+                    //fabBack.startAnimation(blinkzoomin);
+
+                }
+            }, 500);
+        }
+    };
 
     public void getAppointmentsCount() {
         Call<AllCountsResponse> call = BaseActivity.getInstance().serviceCalls.getAllCounts(sessionManager.getDOCTORID(),
