@@ -42,7 +42,7 @@ public class ConfirmedAppointmentsAdapter extends RecyclerView.Adapter<Confirmed
         holder.tvPatientName.setText(confirmedAppointmentsResponseList.get(i).getPatientName());
         holder.tvApptStatus.setText(confirmedAppointmentsResponseList.get(i).getApptStatus());
     }
-
+     //hjghjh
     @Override
     public int getItemCount() {
         return confirmedAppointmentsResponseList.size();
